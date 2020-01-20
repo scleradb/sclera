@@ -2,7 +2,7 @@
 
 Sclera is a stand-alone SQL processor with native support for analytics, data virtualization, and streaming data. Sclera can be deployed as an independent application, or can embed within your applications to enable advanced real-time analytics capabilities.
 
-[Website](https://www.scleradb.com)
-[Read the FAQ](https://www.scleradb.com/faq)
+- [Website](https://www.scleradb.com)
+- [Read the FAQ](https://www.scleradb.com/faq)
 
 Sclera is licensed under the Apache License version 2.0.
