@@ -1,0 +1,2 @@
+com.scleradb.dbms.rdbms.h2.service.H2Service
+com.scleradb.dbms.rdbms.h2.service.H2MemService

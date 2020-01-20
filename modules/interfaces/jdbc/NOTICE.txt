@@ -1,0 +1,6 @@
+Sclera - JDBC Driver
+Copyright 2012 - 2020 Sclera, Inc.
+ 
+This product uses the following third-party components:
+
+Logback Classic - Eclipse Public License v1.0 - http://logback.qos.ch/license.html

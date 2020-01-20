@@ -1,0 +1,7 @@
+Sclera - Configuration Manager
+Copyright 2012 - 2020 Sclera, Inc.
+ 
+This product uses the following third-party components:
+
+Typesafe Config - Apache License v2.0 - http://www.apache.org/licenses/LICENSE-2.0
+Logback Classic - Eclipse Public License v1.0 - http://logback.qos.ch/license.html

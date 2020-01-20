@@ -1,0 +1,9 @@
+bin/
+target/
+*.log
+*.swp
+*.bak
+*.jar
+*.bin
+*.lock
+*.pyc
