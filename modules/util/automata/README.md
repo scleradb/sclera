@@ -1,3 +1,3 @@
 # Sclera - Automata
 
-Provides a non-determinic finite automata implementation.
+Provides a non-deterministic finite automata implementation.
