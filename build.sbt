@@ -4,6 +4,8 @@ description := "Sclera Analytics Visualization Platform"
 
 ThisBuild / version := "4.0-SNAPSHOT"
 
+ThisBuild / homepage := Some(url("https://github.com/scleradb/sclera"))
+
 ThisBuild / organization := "com.scleradb"
 
 ThisBuild / organizationName := "Sclera, Inc."
