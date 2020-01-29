@@ -42,7 +42,7 @@ import com.scleradb.sql.parser._
 import com.scleradb.sql.expr.{CharConst, DateConst, TimeConst, TimestampConst}
 import com.scleradb.sql.result.TableResult
 
-import com.scleradb.visual.exec.{PlotProcessor, PlotRender}
+import com.scleradb.visual.exec.{PlotProcessor, Renderer}
 
 import com.scleradb.interfaces.display.Display
 import com.scleradb.interfaces.display.service.DisplayService
@@ -65,15 +65,13 @@ object Repl {
 
     private var displayOpt: Option[Display] = None
     private def display: Display = displayOpt getOrElse {
-        throw new RuntimeException("Display not started")
+        throw new IOException("Display not started")
     }
 
     private var processorOpt: Option[Processor] = None
     private def processor: Processor = processorOpt getOrElse {
         throw new RuntimeException("Sclera not initialized. Exiting.")
     }
-
-    private lazy val plotProcessor: PlotProcessor = PlotProcessor(processor)
 
     private var outputFormatOpt: Option[CSVFormat] = None
     private var isEchoEnabled: Boolean = true
@@ -174,16 +172,17 @@ object Repl {
             displayOpt.foreach { display => display.stop() }
             displayOpt = None
 
-        case PlotCommand(spec) =>
+        case DisplayResult(query, specOpt, titleOpt) =>
             Counter.reset()
-            val plotRender: PlotRender = plotProcessor.process(spec)
+            val renderer: Renderer =
+                Renderer(processor, query, specOpt, titleOpt)
 
-            plotRender.init()
+            renderer.init()
             try {
-                val (specs, dataIter) = plotRender.resultSpecs(batchSize = 500)
+                val (specs, dataIter) = renderer.resultSpecs(batchSize = 500)
                 display.submit(specs.toString)
                 dataIter.foreach(d => display.submit(d.toString))
-            } finally plotRender.close()
+            } finally renderer.close()
 
         case CommandTimer(command) =>
             val begin: Long = System.nanoTime()

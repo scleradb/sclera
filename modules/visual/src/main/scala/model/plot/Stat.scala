@@ -38,7 +38,7 @@ import com.scleradb.analytics.transform.objects.Transformer
 import com.scleradb.analytics.transform.expr._
 
 import com.scleradb.visual.model.spec._
-import com.scleradb.visual.exec.PlotProcessor
+import com.scleradb.visual.exec.{PlotProcessor, PlotNormalizer}
 
 /** Statistics - operator that translates an input layer to an output layer */
 sealed abstract class Stat extends Transformer {
@@ -56,7 +56,6 @@ sealed abstract class Stat extends Transformer {
     def scalExprs: List[ScalExpr]
 
     def rewrite(
-        plotProc: PlotProcessor,
         dataExpr: RelExpr,
         facetExprs: List[ScalExpr],
         layer: Layer,
@@ -146,13 +145,14 @@ sealed abstract class Stat extends Transformer {
 
                 val statLayers: List[LayerSetTask] =
                     outLayerTasks.map { t =>
-                        plotProc.normalizer.normalize(t, outTargetMap)
+                        PlotNormalizer.normalize(t, outTargetMap)
                     }
 
                 (statDataExpr, statLayers)
             }
 
-        val updOutLayer: Layer = plotProc.applyTasks(outLayer, updOutLayerTasks)
+        val updOutLayer: Layer =
+            PlotProcessor.applyTasks(outLayer, updOutLayerTasks)
 
         (updOutDataExpr, updOutLayer)
     }

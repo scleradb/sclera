@@ -27,7 +27,6 @@ import com.scleradb.visual.model.plot._
 
 object PlotPlanner {
     def plan(
-        plotProc: PlotProcessor,
         columns: List[Column],
         resultOrder: List[SortExpr],
         dataPlot: DataPlot,
@@ -39,9 +38,9 @@ object PlotPlanner {
             dataPlot.axesSpecs(AxisY)
 
         val xAxes: List[Axis] =
-            axes(plotProc, columns, resultOrder, AxisX, xAxesSpecs)
+            axes(columns, resultOrder, AxisX, xAxesSpecs)
         val yAxes: List[Axis] =
-            axes(plotProc, columns, resultOrder, AxisY, yAxesSpecs)
+            axes(columns, resultOrder, AxisY, yAxesSpecs)
 
         val xAxesExprs: List[ScalExpr] = xAxesSpecs.map { case (e, _) => e }
         val yAxesExprs: List[ScalExpr] = yAxesSpecs.map { case (e, _) => e }
@@ -160,7 +159,6 @@ object PlotPlanner {
     }
 
     private def axes(
-        plotProc: PlotProcessor,
         columns: List[Column],
         resultOrder: List[SortExpr],
         axisId: AxisId,
@@ -169,7 +167,7 @@ object PlotPlanner {
         val inferredTasks: List[AxisSetTask] =
             PlotInference.axisSetTasks(e, columns, resultOrder)
 
-        plotProc.applyTasks(Axis.default(axisId), inferredTasks ::: tasks)
+        PlotProcessor.applyTasks(Axis.default(axisId), inferredTasks ::: tasks)
     }
 
     private def axisWeights(axes: List[Axis]): List[Double] =

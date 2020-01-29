@@ -17,40 +17,23 @@
 
 package com.scleradb.visual.exec
 
-import com.scleradb.exec.Processor
-import com.scleradb.config.ScleraConfig
-
-import com.scleradb.sql.expr.{ScalExpr, ScalValueBase}
-import com.scleradb.sql.exec.ScalCastEvaluator
+import com.scleradb.sql.expr.{RelExpr, ScalExpr, ScalValueBase}
 
 import com.scleradb.visual.model.spec._
 import com.scleradb.visual.model.plot._
 
-class PlotProcessor(processor: Processor) {
-    val normalizer: PlotNormalizer = new PlotNormalizer(this)
-
-    def process(spec: PlotSpec): PlotRender = {
-        val PlotSpec(dataExpr, plotSetTasks, isAligned, delayOpt) = spec
-        val (layoutTasks, transTasks, dataTasks) =
-            separatePlotTasks(plotSetTasks)
-
-        val layout: Layout = applyTasks(Layout.default, layoutTasks)
-        val transition: Transition = applyTasks(Transition.default, transTasks)
-
-        // add a default plot if nothing specified
-        val dataPlot: DataPlot = applyTasks(DataPlot.default, dataTasks) match {
-            case DataPlot(facetOpt, Nil | List(DataSubPlot(Nil)), axisTasks) =>
-                DataPlot(facetOpt, List(DataSubPlot.filler), axisTasks)
-            case other => other
-        }
+object PlotProcessor {
+    def process(dataExpr: RelExpr, spec: PlotSpec): Plot = {
+        val layout: Layout = applyTasks(Layout.default, spec.layoutTasks)
+        val transition: Transition =
+            applyTasks(Transition.default, spec.transitionTasks)
+        val dataPlot: DataPlot =
+            applyTasks(DataPlot.default, spec.dataPlotTasks)
 
         val (updDataExpr, updDataPlot) =
-            normalizer.normalize(dataExpr, dataPlot)
+            PlotNormalizer.normalize(dataExpr, dataPlot)
 
-        PlotRender(
-            processor, updDataExpr, this,
-            layout, transition, updDataPlot, isAligned,
-        )
+        Plot(updDataExpr, layout, transition, updDataPlot, spec.isAligned)
     }
 
     private def applyTasks(layout: Layout, tasks: List[LayoutSetTask]): Layout =
@@ -62,16 +45,13 @@ class PlotProcessor(processor: Processor) {
         layout: Layout,
         task: LayoutSetTask
     ): Layout = task match {
-        case LayoutSetTitle(title) =>
-            Layout(Some(title), layout.display, layout.coord)
-
         case LayoutSetDisplay(displayTasks) =>
             val display: Display = applyTasks(layout.display, displayTasks)
-            Layout(layout.titleOpt, display, layout.coord)
+            Layout(display, layout.coord)
 
-        case LayoutSetCoordinates(coordSetTasks) =>
-            val coord: Coordinates = applyTask(layout.coord, coordSetTasks)
-            Layout(layout.titleOpt, layout.display, coord)
+        case LayoutSetCoordinates(coordSetTask) =>
+            val coord: Coordinates = applyTask(layout.coord, coordSetTask)
+            Layout(layout.display, coord)
     }
 
     private def applyTasks(
@@ -312,7 +292,7 @@ class PlotProcessor(processor: Processor) {
 
     private def applyTasks(
         trans: Transition,
-        tasks: List[TransSetTask]
+        tasks: List[TransitionSetTask]
     ): Transition = 
         tasks.foldLeft (trans) { case (prevTrans, task) =>
             applyTask(prevTrans, task)
@@ -320,12 +300,12 @@ class PlotProcessor(processor: Processor) {
 
     private def applyTask(
         trans: Transition,
-        task: TransSetTask
+        task: TransitionSetTask
     ): Transition = task match {
-        case TransSetDuration(duration) =>
+        case TransitionSetDuration(duration) =>
             Transition(duration, trans.ease)
 
-        case TransSetEase(ease) =>
+        case TransitionSetEase(ease) =>
             Transition(trans.duration, ease)
     }
 
@@ -354,9 +334,11 @@ class PlotProcessor(processor: Processor) {
             DataPlot(dataPlot.facetOpt, dataPlot.subPlots, axisTasks)
 
         case DataPlotSetSubPlot(tasks) =>
-            val layers: List[Layer] = tasks.map { subPlotSetTask =>
-                applyTasks(Layer.default, subPlotSetTask.tasks)
-            }
+            val layers: List[Layer] =
+                if( tasks.isEmpty ) List(Layer.default)
+                else tasks.map { subPlotSetTask =>
+                    applyTasks(Layer.default, subPlotSetTask.tasks)
+                }
 
             val subPlots: List[DataSubPlot] =
                 dataPlot.subPlots :+ DataSubPlot(layers)
@@ -652,33 +634,4 @@ class PlotProcessor(processor: Processor) {
                 legend.labelsOpt, isReversed
             )
     }
-
-    private def separatePlotTasks(
-        plotSetTasks: List[PlotSetTask]
-    ): (List[LayoutSetTask], List[TransSetTask], List[DataPlotSetTask]) = {
-        val layoutTasks: List[LayoutSetTask] =
-            plotSetTasks.flatMap {
-                case PlotSetLayout(tasks) => tasks
-                case _ => Nil
-            }
-
-        val transTasks: List[TransSetTask] =
-            plotSetTasks.flatMap {
-                case PlotSetTrans(tasks) => tasks
-                case _ => Nil
-            }
-
-        val dataTasks: List[DataPlotSetTask] =
-            plotSetTasks.flatMap {
-                case PlotSetDataPlot(tasks) => tasks
-                case _ => Nil
-            }
-
-        return (layoutTasks, transTasks, dataTasks)
-    }
-}
-
-object PlotProcessor {
-    def apply(processor: Processor): PlotProcessor =
-        new PlotProcessor(processor)
 }

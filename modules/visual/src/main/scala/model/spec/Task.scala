@@ -20,17 +20,7 @@ package com.scleradb.visual.model.spec
 import com.scleradb.sql.expr.{ScalExpr, ScalValueBase, SortExpr}
 import com.scleradb.visual.model.plot._
 
-sealed abstract class PlotSetTask
-
-case class PlotSetLayout(tasks: List[LayoutSetTask]) extends PlotSetTask
-
-case class PlotSetTrans(tasks: List[TransSetTask]) extends PlotSetTask
-
-case class PlotSetDataPlot(tasks: List[DataPlotSetTask]) extends PlotSetTask
-
 sealed abstract class LayoutSetTask
-
-case class LayoutSetTitle(title: String) extends LayoutSetTask
 
 case class LayoutSetDisplay(tasks: List[DisplaySetTask]) extends LayoutSetTask
 
@@ -209,11 +199,11 @@ case class LegendSetLabelAlign(align: String) extends LegendSetTask
 
 case class LegendSetLabelOrder(isReversed: Boolean) extends LegendSetTask
 
-sealed abstract class TransSetTask
+sealed abstract class TransitionSetTask
 
-case class TransSetDuration(duration: Int) extends TransSetTask
+case class TransitionSetDuration(duration: Int) extends TransitionSetTask
 
-case class TransSetEase(ease: String) extends TransSetTask
+case class TransitionSetEase(ease: String) extends TransitionSetTask
 
 sealed abstract class DataPlotSetTask
 

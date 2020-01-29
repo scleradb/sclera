@@ -30,20 +30,28 @@ import com.scleradb.sql.expr._
 
 import com.scleradb.visual.model.plot._
 
-object PlotJson {
-    def specifications(
+object ResultJson {
+    def table(cols: Seq[Column], titleOpt: Option[String]): JsObject = jsObject(
+        "type" -> JsString("table"),
+        "columns" -> columnSpec(cols),
+        "title" -> titleOpt.map(s => JsString(s)).getOrElse(JsNull)
+    )
+
+    def plot(
         layout: Layout,
         trans: Transition,
         facetOpt: Option[Facet],
         plotInfo: DataPlotInfo,
-        columns: Seq[Column],
+        cols: Seq[Column],
+        titleOpt: Option[String]
     ): JsObject = jsObject(
-        "type" -> JsString("specifications"),
+        "type" -> JsString("plot"),
         "plot" -> plotSpec(
             layout, trans, facetOpt, plotInfo,
-            columns.map { col => ColRef(col.name) }
+            cols.map { col => ColRef(col.name) }
         ),
-        "columns" -> columnSpec(columns)
+        "columns" -> columnSpec(cols),
+        "title" -> titleOpt.map(s => JsString(s)).getOrElse(JsNull)
     )
 
     private def plotSpec(
@@ -88,19 +96,18 @@ object PlotJson {
         )
     )
 
-    private def columnSpec(columns: Seq[Column]): JsArray = jsArraySeq(
-        columns.map { col => toJson(col) }
+    private def columnSpec(cols: Seq[Column]): JsArray = jsArraySeq(
+        cols.map { col => toJson(col) }
     )
 
-    def data(columns: Seq[Column], rows: Seq[TableRow]): JsObject = jsObject(
+    def data(cols: Seq[Column], rows: Seq[TableRow]): JsObject = jsObject(
         "type" -> JsString("data"),
         "data" -> jsArraySeq(rows.map { r =>
-            jsArraySeq(columns.map { col => toJsonVal(r.getScalExpr(col)) })
+            jsArraySeq(cols.map { col => toJsonVal(r.getScalExpr(col)) })
         })
     )
 
     private def toJson(layout: Layout): JsObject = jsObject(
-        "title" -> layout.titleOpt.map(s => JsString(s)).getOrElse(JsNull),
         "coord" -> toJson(layout.coord),
         "display" -> toJson(layout.display)
     )

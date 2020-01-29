@@ -37,14 +37,12 @@ trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
 
     def command: Parser[ReplCommand] =
         sqlStatement ~ opt(plotSpec) ^^ {
-            case SqlRelQueryStatement(query)~Some(plotSpec) =>
-                PlotCommand(plotSpec(query))
+            case SqlRelQueryStatement(query)~(plotSpecOpt@Some(_)) =>
+                DisplayResult(query, plotSpecOpt, titleOpt = None)
             case stmt ~ _ =>
                 SqlCommand(stmt)
         } |
-        metaCommand
-
-    private def metaCommand: Parser[MetaCommand] =
+        "DISPLAY" ~> displayCommand |
         "TIME" ~> command ^^ { command => CommandTimer(command) } |
         "SOURCE" ~> stringLit ^^ { filename => Source(filename) } |
         "LOGGERCONFIG" ^^^ { LoggerConfig } |
@@ -68,12 +66,18 @@ trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
         } |
         "ECHO" ~> switch ^^ { isEnabled => Echo(isEnabled) } |
         "RESET" ^^^ { Reset } |
-        "DISPLAY" ~> ("START" | "STOP") ~ rep(rawCharConst) ^^ {
+        failure("Incorrect command")
+
+    private def displayCommand: Parser[DisplayCommand] =
+        ("START" | "STOP") ~ rep(rawCharConst) ^^ {
             case "START"~params => DisplayStart(params)
             case "STOP"~params => DisplayStop(params)
             case _ => throw new IllegalArgumentException("Incorrect command")
         } |
-        failure("Incorrect command")
+        opt(paren(rawCharConst)) ~ sqlQueryStatement ~ opt(plotSpec) ^^ {
+            case titleOpt~SqlRelQueryStatement(query)~plotSpecOpt =>
+                DisplayResult(query, plotSpecOpt, titleOpt)
+        }
 
     private def switch: Parser[Boolean] =
         "ON" ^^^ { true } | "OFF" ^^^ { false }

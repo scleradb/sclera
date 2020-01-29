@@ -105,7 +105,7 @@ lazy val visual = Project(
     id = "sclera-visual",
     base = file("modules/visual")
 ) dependsOn (
-    core % "provided", config % "provided"
+    core % "provided"
 )
 
 lazy val jdbc = Project(

@@ -18,20 +18,28 @@
 package com.scleradb.interfaces.shell
 
 import org.apache.commons.csv.CSVFormat
-import com.scleradb.sql.statements.SqlStatement
+
+import com.scleradb.sql.expr.RelExpr
+import com.scleradb.sql.statements.{SqlStatement, SqlQueryStatement}
 
 import com.scleradb.visual.model.spec.PlotSpec
 
 abstract class ReplCommand
 case class SqlCommand(stmt: SqlStatement) extends ReplCommand
-case class PlotCommand(spec: PlotSpec) extends ReplCommand
 
 sealed abstract class MetaCommand extends ReplCommand
 case class Echo(isEnabled: Boolean) extends MetaCommand
 case class OutputFormat(formatOpt: Option[CSVFormat]) extends MetaCommand
 case class CommandTimer(command: ReplCommand) extends MetaCommand
 case class Source(fileName: String) extends MetaCommand
-case class DisplayStart(args: List[String]) extends MetaCommand
-case class DisplayStop(args: List[String]) extends MetaCommand
 case object Reset extends MetaCommand
 case object LoggerConfig extends MetaCommand
+
+sealed abstract class DisplayCommand extends ReplCommand
+case class DisplayStart(args: List[String]) extends DisplayCommand
+case class DisplayStop(args: List[String]) extends DisplayCommand
+case class DisplayResult(
+    query: RelExpr,
+    specOpt: Option[PlotSpec],
+    titleOpt: Option[String]
+) extends DisplayCommand

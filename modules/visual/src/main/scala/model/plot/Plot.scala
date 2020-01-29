@@ -17,13 +17,13 @@
 
 package com.scleradb.visual.model.plot
 
-import com.scleradb.sql.expr.ScalExpr
+import com.scleradb.sql.expr.RelExpr
 
-case class Layout(
-    display: Display,
-    coord: Coordinates
+/** Plot */
+case class Plot(
+    dataExpr: RelExpr,
+    layout: Layout,
+    transition: Transition,
+    dataPlot: DataPlot,
+    isAligned: Boolean
 )
-
-object Layout {
-    lazy val default: Layout = Layout(Display.default, Coordinates.grid)
-}

@@ -31,7 +31,7 @@ trait PlotParser extends SqlQueryParser {
     lexical.reserved ++= Seq(
         "ALIGN", "ALIGNED", "ALPHA", "AXIS",
         "BOTTOM", "COLOR", "COLOUR", "COLUMNS",
-        "DELAY", "DISPLAY", "DISTINCT", "DISPLAYORDER", "DOMAIN", "DURATION",
+        "DISPLAY", "DISTINCT", "DISPLAYORDER", "DOMAIN", "DURATION",
         "EASE", "FACET", "FALSE", "FILL", "FREE", "GEOM", "GRID", "GROUP",
         "HEIGHT", "HIDDEN", "HJUST", "IDENTITY", "INCREASING", "INTERPOLATE",
         "KEY", "LABEL", "LABELS",
@@ -47,33 +47,37 @@ trait PlotParser extends SqlQueryParser {
         "WEIGHT", "WIDTH", "WINDOW", "XAXIS", "YAXIS", "ZOOM"
     )
 
-    def plotSpec: Parser[RelExpr => PlotSpec] =
-        opt("DELAY" ~> rawIntConst) ~ rep1(plotSetTask) ~
-        opt("LAYOUT" ~> "ALIGNED") ^^ { case delayOpt~tasks~alignedOpt =>
-            query => PlotSpec(query, tasks, !alignedOpt.isEmpty, delayOpt)
-        }
-
-    def plotSetTask: Parser[PlotSetTask] =
-        rep1(dataPlotSetTasks) ^^ {
-            tasks => PlotSetDataPlot(tasks.flatten)
-        } |
-        rep1(layoutSetTask) ^^ {
-            tasks => PlotSetLayout(tasks)
-        } |
-        "TRANSITION" ~> paren(repsep(transSetTask, ",")) ^^ {
-            tasks => PlotSetTrans(tasks)
+    def plotSpec: Parser[PlotSpec] =
+        dataPlotSetTasks ~ rep(layoutSetTask) ~
+        opt("TRANSITION" ~> paren(repsep(transitionSetTask, ","))) ~
+        opt("LAYOUT" ~> "ALIGNED") ^^ {
+            case dataTasks~layoutTasks~transitionTasksOpt~alignedOpt =>
+                PlotSpec(
+                    dataTasks, layoutTasks, transitionTasksOpt.toList.flatten,
+                    !alignedOpt.isEmpty
+                )
         }
 
     def dataPlotSetTasks: Parser[List[DataPlotSetTask]] =
-        "FACET" ~> paren(repsep(facetSetTask, ",")) ^^ {
-            tasks => List(DataPlotSetFacet(tasks))
-        } |
+        rep1(plotTasks) ~ opt(facetTask) ~ rep(axisTask) ^^ {
+            case plotTasks~facetTaskOpt~axisTasks =>
+                plotTasks.flatten ::: facetTaskOpt.toList ::: axisTasks
+        }
+
+    def plotTasks: Parser[List[DataPlotSetSubPlot]] =
         "PLOT" ~> opt(paren(dataPlotSetSubPlots)) ^^ {
             case Some(subPlots) => subPlots
             case None => List(DataPlotSetSubPlot(Nil))
-        } |
+        }
+
+    def facetTask: Parser[DataPlotSetFacet] =
+        "FACET" ~> paren(repsep(facetSetTask, ",")) ^^ {
+            tasks => DataPlotSetFacet(tasks)
+        }
+
+    def axisTask: Parser[DataPlotSetAxis] =
         "AXIS" ~> scalExpr ~ paren(repsep(axisSetTask, ",")) ^^ {
-            case expr~tasks => List(DataPlotSetAxis(expr, tasks))
+            case expr~tasks => DataPlotSetAxis(expr, tasks)
         }
 
     def dataPlotSetSubPlots: Parser[List[DataPlotSetSubPlot]] =
@@ -94,9 +98,6 @@ trait PlotParser extends SqlQueryParser {
         }
 
     def layoutSetTask: Parser[LayoutSetTask] =
-        "TITLE" ~> equals(rawCharConst) ^^ {
-            title => LayoutSetTitle(title)
-        } |
         "DISPLAY" ~> paren(repsep(displaySetTask, ",")) ^^ {
             tasks => LayoutSetDisplay(tasks)
         } |
@@ -232,12 +233,12 @@ trait PlotParser extends SqlQueryParser {
             stateOpt => FacetSetMargin(stateOpt getOrElse true)
         }
 
-    def transSetTask: Parser[TransSetTask] =
+    def transitionSetTask: Parser[TransitionSetTask] =
         "DURATION" ~> equals(rawIntConst) ^^ {
-            duration => TransSetDuration(duration)
+            duration => TransitionSetDuration(duration)
         } |
         "EASE" ~> equals(rawCharConst) ^^ {
-            ease => TransSetEase(ease)
+            ease => TransitionSetEase(ease)
         }
 
     def layerSetTask: Parser[LayerSetTask] = layerSetGeom | layerSetExtraTask

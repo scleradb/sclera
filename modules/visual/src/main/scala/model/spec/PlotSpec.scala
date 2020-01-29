@@ -17,11 +17,9 @@
 
 package com.scleradb.visual.model.spec
 
-import com.scleradb.sql.expr.RelExpr
-
 case class PlotSpec(
-    relExpr: RelExpr,
-    tasks: List[PlotSetTask],
-    isAligned: Boolean,
-    delayOpt: Option[Int]
+    dataPlotTasks: List[DataPlotSetTask],
+    layoutTasks: List[LayoutSetTask],
+    transitionTasks: List[TransitionSetTask],
+    isAligned: Boolean
 )

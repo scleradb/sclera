@@ -40,7 +40,6 @@ case class Mark(
     private val regexStr: String = label + "*"
 
     def rewrite(
-        plotProc: PlotProcessor,
         dataExpr: RelExpr,
         groupColOpt: Option[ColRef],
         keyCol: ColRef,
@@ -89,7 +88,7 @@ case class Mark(
         val markDataExpr: RelExpr =
             RelOpExpr(Project(markTargets), List(matchDataExpr))
 
-        val markLayer: Layer = plotProc.applyTasks(
+        val markLayer: Layer = PlotProcessor.applyTasks(
             Layer(
                 geom, Aes.default(geom),
                 groupOpt = groupColOpt, keyOpt = Some(keyCol),

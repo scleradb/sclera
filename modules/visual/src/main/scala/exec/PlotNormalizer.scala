@@ -20,11 +20,13 @@ package com.scleradb.visual.exec
 import scala.language.postfixOps
 
 import com.scleradb.util.tools.Counter
+
 import com.scleradb.sql.expr._
+
 import com.scleradb.visual.model.plot._
 import com.scleradb.visual.model.spec._
 
-class PlotNormalizer(plotProc: PlotProcessor) {
+object PlotNormalizer {
     def normalize(
         inpDataExpr: RelExpr,
         inpDataPlot: DataPlot
@@ -472,10 +474,8 @@ class PlotNormalizer(plotProc: PlotProcessor) {
                 }
         
                 val (nextExpr, markLayer) = mark.rewrite(
-                    plotProc, prevExpr,
-                    layer.groupOpt.map { e => column(e) },
-                    keyCol, geom, targets,
-                    facetExprs.map { e => column(e) }
+                    prevExpr, layer.groupOpt.map { e => column(e) },
+                    keyCol, geom, targets, facetExprs.map { e => column(e) }
                 )
 
                 (nextExpr, prevLayers :+ markLayer)
@@ -521,7 +521,7 @@ class PlotNormalizer(plotProc: PlotProcessor) {
         layer.stats.foldLeft ((dataExpr, List[Layer]())) {
             case ((prevDataExpr, prevStatLayers), (stat, tasks)) =>
                 val (nextDataExpr, statLayer) = stat.rewrite(
-                    plotProc, prevDataExpr, facetExprs, layer, tasks
+                    prevDataExpr, facetExprs, layer, tasks
                 )
 
                 val nextStatLayers: List[Layer] = prevStatLayers :+ statLayer
