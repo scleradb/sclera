@@ -31,6 +31,11 @@ import com.scleradb.sql.expr._
 import com.scleradb.visual.model.plot._
 
 object ResultJson {
+    def text(s: String): JsObject = jsObject(
+        "type" -> JsString("text"),
+        "text" -> JsString(s)
+    )
+
     def table(cols: Seq[Column], titleOpt: Option[String]): JsObject = jsObject(
         "type" -> JsString("table"),
         "columns" -> columnSpec(cols),

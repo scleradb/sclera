@@ -77,7 +77,8 @@ trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
         opt(paren(rawCharConst)) ~ sqlQueryStatement ~ opt(plotSpec) ^^ {
             case titleOpt~SqlRelQueryStatement(query)~plotSpecOpt =>
                 DisplayResult(query, plotSpecOpt, titleOpt)
-        }
+        } |
+        rawCharConst ^^ { text => DisplayText(text) }
 
     private def switch: Parser[Boolean] =
         "ON" ^^^ { true } | "OFF" ^^^ { false }

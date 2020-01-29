@@ -42,7 +42,7 @@ import com.scleradb.sql.parser._
 import com.scleradb.sql.expr.{CharConst, DateConst, TimeConst, TimestampConst}
 import com.scleradb.sql.result.TableResult
 
-import com.scleradb.visual.exec.{PlotProcessor, Renderer}
+import com.scleradb.visual.exec.{Renderer, ResultJson}
 
 import com.scleradb.interfaces.display.Display
 import com.scleradb.interfaces.display.service.DisplayService
@@ -183,6 +183,9 @@ object Repl {
                 display.submit(specs.toString)
                 dataIter.foreach(d => display.submit(d.toString))
             } finally renderer.close()
+
+        case DisplayText(text) =>
+            display.submit(ResultJson.text(text).toString)
 
         case CommandTimer(command) =>
             val begin: Long = System.nanoTime()

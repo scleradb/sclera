@@ -43,3 +43,4 @@ case class DisplayResult(
     specOpt: Option[PlotSpec],
     titleOpt: Option[String]
 ) extends DisplayCommand
+case class DisplayText(text: String) extends DisplayCommand
