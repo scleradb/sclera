@@ -81,12 +81,15 @@ trait PlotParser extends SqlQueryParser {
         }
 
     def dataPlotSetSubPlots: Parser[List[DataPlotSetSubPlot]] =
-        layerSetCrossGeoms ~ opt("," ~> repsep(layerSetExtraTask, ",")) ^^ {
+        layerSetCrossGeoms ~ opt("," ~> rep1sep(layerSetExtraTask, ",")) ^^ {
             case geomTasks~tasksOpt => geomTasks.map { geomTask =>
                 DataPlotSetSubPlot(
                     List(DataSubPlotSetLayer(geomTask::tasksOpt.getOrElse(Nil)))
                 )
             }
+        } |
+        rep1sep(layerSetExtraTask, ",") ^^ {
+            tasks => List(DataPlotSetSubPlot(List(DataSubPlotSetLayer(tasks))))
         } |
         repsep(dataSubPlotSetLayer, ",") ^^ { tasks =>
             List(DataPlotSetSubPlot(tasks))
