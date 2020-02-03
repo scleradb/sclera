@@ -17,13 +17,14 @@
 
 package com.scleradb.util.tools
 
-import java.net.URL
+import java.net.{URL, MalformedURLException}
 import java.nio.file.{Path, PathMatcher, FileSystem, FileSystems}
 import java.io.{File, InputStream, FileInputStream}
 import java.util.zip.{ZipInputStream, GZIPInputStream}
 
 import scala.collection.mutable
 import scala.io.Source
+import scala.util.{Try, Success, Failure}
 
 /** Content of a file
  *
@@ -40,15 +41,21 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
     /** Accumulates input streams that need to be closed */
     private val streams: mutable.ListBuffer[InputStream] = mutable.ListBuffer()
 
-    /** Contents of the URL */
-    def iter(url: URL): Iterator[Content] = {
-        val urlis: InputStream = url.openStream()
-        streams.append(urlis)
-        iter(url.toString, urlis, isRoot = true)
+    /** Contents of the root file/directory/URL */
+    def iter(path: String): Iterator[Content] = Try(new URL(path)) match {
+        case Success(url) => iter(url)
+        case Failure(e: MalformedURLException) => iter(new File(path))
+        case Failure(e) => throw e
     }
 
-    /** Contents of the root file/directory */
-    def iter(path: String): Iterator[Content] = iter(new File(path))
+    /** Contents of the URL */
+    def iter(url: URL): Iterator[Content] = url.getProtocol match {
+        case "file" => iter(new File(url.toURI))
+        case _ =>
+            val urlis: InputStream = url.openStream()
+            streams.append(urlis)
+            iter(url.toString, urlis, isRoot = true)
+    }
 
     /** Contents of the root file/directory */
     def iter(f: File): Iterator[Content] = iter(f, isRoot = true)
