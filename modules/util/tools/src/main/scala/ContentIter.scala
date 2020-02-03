@@ -17,6 +17,7 @@
 
 package com.scleradb.util.tools
 
+import java.net.URL
 import java.nio.file.{Path, PathMatcher, FileSystem, FileSystems}
 import java.io.{File, InputStream, FileInputStream}
 import java.util.zip.{ZipInputStream, GZIPInputStream}
@@ -39,7 +40,14 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
     /** Accumulates input streams that need to be closed */
     private val streams: mutable.ListBuffer[InputStream] = mutable.ListBuffer()
 
-    /** Contents of the file/directory given by the path */
+    /** Contents of the URL */
+    def iter(url: URL): Iterator[Content] = {
+        val urlis: InputStream = url.openStream()
+        streams.append(urlis)
+        iter(url.toString, urlis, isRoot = true)
+    }
+
+    /** Contents of the root file/directory */
     def iter(path: String): Iterator[Content] = iter(new File(path))
 
     /** Contents of the root file/directory */
