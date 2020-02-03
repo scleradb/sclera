@@ -42,24 +42,33 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
     /** Contents of the file/directory given by the path */
     def iter(path: String): Iterator[Content] = iter(new File(path))
 
+    /** Contents of the root file/directory */
+    def iter(f: File): Iterator[Content] = iter(f, isRoot = true)
+
     /** Contents of the file/directory */
-    def iter(f: File): Iterator[Content] =
-        if( f.isDirectory ) f.listFiles.iterator.flatMap(iter) else {
+    def iter(f: File, isRoot: Boolean): Iterator[Content] =
+        if( f.isDirectory ) {
+            f.listFiles.iterator.flatMap(dirf => iter(dirf, isRoot = false))
+        } else {
             val fis: FileInputStream = new FileInputStream(f)
             streams.append(fis)
-            iter(f.getName, fis)
+            iter(f.getName, fis, isRoot)
         }
 
     /** Contents of the input stream */
-    def iter(name: String, is: InputStream): Iterator[Content] =
-        if( filterOpt.exists(filter => !filter(name)) ) {
+    def iter(
+        name: String,
+        is: InputStream,
+        isRoot: Boolean
+    ): Iterator[Content] =
+        if( !isRoot && filterOpt.exists(filter => !filter(name)) ) {
             Iterator()
         } else if( name.endsWith(".zip") ) {
             val zis: ZipInputStream = new ZipInputStream(is)
             unzipIter(zis)
         } else if( name.endsWith(".gz") ) {
             val gzis: GZIPInputStream = new GZIPInputStream(is)
-            iter(name.substring(0, name.length - 3), gzis)
+            iter(name.substring(0, name.length - 3), gzis, isRoot)
         } else {
             val src: Source = Source.fromInputStream(is)
             Iterator(new Content(name, src.mkString))
@@ -69,7 +78,8 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
     def unzipIter(zis: ZipInputStream): Iterator[Content] =
         Option(zis.getNextEntry) match {
             case Some(zipEntry) if( zipEntry.isDirectory ) => unzipIter(zis)
-            case Some(zipEntry) => iter(zipEntry.getName, zis) ++ unzipIter(zis)
+            case Some(zipEntry) =>
+                iter(zipEntry.getName, zis, isRoot = false) ++ unzipIter(zis)
             case None => Iterator()
         }
 
