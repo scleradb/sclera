@@ -108,6 +108,7 @@ abstract class RelEvalOp extends RelPlanOp {
     ): RelEvalPlanResult
 }
 
+private[scleradb]
 sealed abstract class RelUnaryEvalOp extends RelEvalOp {
     val opDepsPlans: List[RelExprPlan]
 
