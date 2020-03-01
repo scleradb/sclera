@@ -67,7 +67,7 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
         } else {
             val fis: FileInputStream = new FileInputStream(f)
             streams.append(fis)
-            iter(f.getName, fis, isRoot)
+            iter(f.getCanonicalPath, fis, isRoot)
         }
 
     /** Contents of the input stream */
