@@ -2,6 +2,8 @@ name := "sclera"
 
 description := "Sclera Analytics Visualization Platform"
 
+publish / skip := true
+
 ThisBuild / version := "4.0-SNAPSHOT"
 
 ThisBuild / homepage := Some(url("https://github.com/scleradb/sclera"))
