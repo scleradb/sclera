@@ -301,19 +301,17 @@ object Repl {
             case rem => (false, rem)
         }
 
-    def main(args: Array[String]): Unit = {
-        val (isInstall, remArgs) = parseArgs(args.toList)
-
+    private def repl(isInstall: Boolean, args: List[String]): Unit = {
         val proc: Processor = initProcessor(isInstall)
         processorOpt = Some(proc)
 
-        try remArgs.lastOption.map(inp => inp.trim.toUpperCase) match {
+        try args.lastOption.map(inp => inp.trim.toUpperCase) match {
             case Some("EXIT" | "QUIT") =>
-                remArgs.init.foreach(handleInputInteractive)
+                args.init.foreach(handleInputInteractive)
 
             case _ =>
-                remArgs.foreach(handleInputInteractive)
-                if( remArgs.isEmpty ) println
+                args.foreach(handleInputInteractive)
+                if( args.isEmpty ) println
 
                 val version: String =
                     ScleraConfig.versionOpt.getOrElse("(Unspecified version)")
@@ -335,5 +333,10 @@ object Repl {
         }
 
         sys.exit(0)
+    }
+
+    def main(args: Array[String]): Unit = args.toList match {
+        case "-install"::rem => repl(true, rem)
+        case rem => repl(false, rem)
     }
 }
