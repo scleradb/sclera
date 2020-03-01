@@ -33,7 +33,6 @@ case class OutputFormat(formatOpt: Option[CSVFormat]) extends MetaCommand
 case class CommandTimer(command: ReplCommand) extends MetaCommand
 case class Source(fileName: String) extends MetaCommand
 case object Reset extends MetaCommand
-case object LoggerConfig extends MetaCommand
 
 sealed abstract class DisplayCommand extends ReplCommand
 case class DisplayStart(args: List[String]) extends DisplayCommand

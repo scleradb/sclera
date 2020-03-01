@@ -28,8 +28,7 @@ import com.scleradb.visual.sql.parser.PlotParser
 trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
     lexical.delimiters ++= Seq(";")
     lexical.reserved ++= Seq(
-        "DISPLAY", "ECHO", "FORMAT", "LOGGERCONFIG",
-        "RESET", "SOURCE", "START", "STOP", "TIME"
+        "DISPLAY", "ECHO", "FORMAT", "RESET", "SOURCE", "START", "STOP", "TIME"
     )
 
     def commands: Parser[List[ReplCommand]] =
@@ -45,7 +44,6 @@ trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
         "DISPLAY" ~> displayCommand |
         "TIME" ~> command ^^ { command => CommandTimer(command) } |
         "SOURCE" ~> stringLit ^^ { filename => Source(filename) } |
-        "LOGGERCONFIG" ^^^ { LoggerConfig } |
         "FORMAT" ~> ("TABLE" | ident) ~ opt(ident) ^^ {
             case "TABLE"~_ =>
                 OutputFormat(None)

@@ -201,11 +201,6 @@ object Repl {
                 handleInput(inp)
             }
 
-        case LoggerConfig =>
-            val lc: LoggerContext =
-                LoggerFactory.getILoggerFactory().asInstanceOf[LoggerContext]
-            StatusPrinter.print(lc);
-
         case OutputFormat(formatOpt) =>
             outputFormatOpt = formatOpt
 
@@ -335,7 +330,14 @@ object Repl {
         sys.exit(0)
     }
 
+    private def printLoggerConfig(): Unit = {
+        val lc: LoggerContext =
+            LoggerFactory.getILoggerFactory().asInstanceOf[LoggerContext]
+        StatusPrinter.print(lc);
+    }
+
     def main(args: Array[String]): Unit = args.toList match {
+        case "-loggerconfig"::_ => printLoggerConfig()
         case "-install"::rem => repl(true, rem)
         case rem => repl(false, rem)
     }
