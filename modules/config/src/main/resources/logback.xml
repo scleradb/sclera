@@ -1,7 +1,7 @@
 <configuration debug="false">
   <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${SCLERA_HOME}/log/sclera.log</file>
+    <file>${SCLERA_ROOT:-${user.home}/.sclera}/home/log/sclera.log</file>
     <encoder>
       <pattern>%d{HH:mm:ss.SSS} TKD [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>

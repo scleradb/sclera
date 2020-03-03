@@ -30,8 +30,6 @@ ThisBuild / scalacOptions ++= Seq(
     "-target:8"
 )
 
-ThisBuild / javaOptions += "-DSCLERA_HOME=%s".format(Path.userHome / ".sclera")
-
 ThisBuild / publishArtifact in (Compile, packageDoc) := false
 
 ThisBuild / exportJars := true

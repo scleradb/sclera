@@ -17,23 +17,22 @@ val mkscript = taskKey[File]("Create executable script")
 
 mkscript := {
     val base = baseDirectory.value
-    val home = Path.userHome / ".sclera"
     val cp = (fullClasspath in Test).value
     val main = (mainClass in Runtime).value
     val (template, scriptName) =
         if( System.getProperty("os.name").startsWith("Windows") ) (
             """|@ECHO OFF
-               |java -Xmx512m -classpath "%%CLASSPATH%%:%s" -DSCLERA_HOME="%s" %s %%*
+               |java -Xmx512m -classpath "%%CLASSPATH%%:%s" %s %%*
                |""".stripMargin,
             "sclera.cmd"
         ) else (
             """|#!/bin/sh
-               |java -Xmx512m -classpath "$CLASSPATH:%s" -DSCLERA_HOME="%s" %s $@
+               |java -Xmx512m -classpath "$CLASSPATH:%s" %s $@
                |""".stripMargin,
             "sclera"
         )
     val mainStr = main getOrElse sys.error("No main class specified")
-    val contents = template.format(cp.files.absString, home, mainStr)
+    val contents = template.format(cp.files.absString, mainStr)
     val out = base / "bin" / scriptName
     IO.write(out, contents)
     out.setExecutable(true)
