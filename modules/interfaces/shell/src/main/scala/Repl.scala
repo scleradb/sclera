@@ -302,9 +302,8 @@ object Repl {
                 args.foreach(handleInputInteractive)
                 if( args.isEmpty ) println
 
-                val version: String =
-                    ScleraConfig.versionOpt.getOrElse("(Unspecified version)")
-                println("Welcome to Sclera " + version)
+                println("Welcome to Sclera " + ScleraConfig.version)
+                println("[" + ScleraConfig.rootDir.getCanonicalPath + "]")
                 println
 
                 consoleIter(ScleraConfig.prompt, handleInputInteractive)
