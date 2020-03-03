@@ -17,6 +17,8 @@
 
 package com.scleradb.config
 
+import java.io.File
+
 import org.slf4j.{Logger, LoggerFactory}
 import com.typesafe.config._
 
@@ -25,19 +27,15 @@ import scala.jdk.CollectionConverters._
 object ScleraConfig {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
 
-    private val config: Config =
-        try validated(ConfigFactory.load("sclera"))
-        catch { case (e: Throwable) =>
-            val msg: String = "Configuration error: " + e.getMessage()
-            logger.error(msg)
-            logger.error(e.getStackTrace.mkString("\n"))
-            throw e
-        }
+    private val defaultConfig: Config = ConfigFactory.defaultReference()
 
-    private def validated(cfg: Config): Config = {
-        cfg.checkValid(ConfigFactory.defaultReference(), "sclera")
-        cfg
-    }
+    val configFileOpt: Option[String] =
+        try Option(defaultConfig.getString("sclera.app.conf"))
+        catch { case (_: ConfigException.Missing) => None }
+
+    private val config: Config = configFileOpt.map { conf =>
+        ConfigFactory.load(ConfigFactory.parseFile(new File(conf)))
+    } getOrElse defaultConfig
 
     def configFile: String = config.origin().description()
 
@@ -66,13 +64,15 @@ object ScleraConfig {
         } catch { case (_: ConfigException.Missing) => Nil }
 
     def versionOpt: Option[String] = getStringOpt("sclera.version")
-    def version: String = versionOpt.get
+    def version: String = versionOpt.getOrElse("(Unspecified version)")
 
     def encryptKey: String = getStringOpt("sclera.storage.encryptkey").get
-    def homeDir: String = getStringOpt("sclera.storage.homedir").get
-    def assetDir: String = getStringOpt("sclera.storage.assetdir").get
-    def dataDir: String = getStringOpt("sclera.storage.datadir").get
-    def objectDir: String = getStringOpt("sclera.storage.objectdir").get
+
+    def rootDir: File = new File(getStringOpt("sclera.storage.rootdir").get)
+    def homeDir: File = new File(getStringOpt("sclera.storage.homedir").get)
+    def assetDir: File = new File(getStringOpt("sclera.storage.assetdir").get)
+    def dataDir: File = new File(getStringOpt("sclera.storage.datadir").get)
+    def objectDir: File = new File(getStringOpt("sclera.storage.objectdir").get)
 
     def serviceAssetDir: String = getStringOpt("sclera.service.assetdir").get
 
@@ -165,10 +165,11 @@ object ScleraConfig {
         "sclera.shell.history" -> historyPath,
         "sclera.shell.prompt" -> prompt,
         "sclera.storage.encryptkey" -> encryptKey,
-        "sclera.storage.homedir" -> homeDir,
-        "sclera.storage.assetdir" -> assetDir,
-        "sclera.storage.datadir" -> dataDir,
-        "sclera.storage.objectdir" -> objectDir,
+        "sclera.storage.rootdir" -> rootDir.getCanonicalPath,
+        "sclera.storage.homedir" -> homeDir.getCanonicalPath,
+        "sclera.storage.assetdir" -> assetDir.getCanonicalPath,
+        "sclera.storage.datadir" -> dataDir.getCanonicalPath,
+        "sclera.storage.objectdir" -> objectDir.getCanonicalPath,
         "sclera.version" -> versionOpt.getOrElse("[Not Specified]")
     )
 }
