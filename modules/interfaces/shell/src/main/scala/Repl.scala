@@ -290,12 +290,6 @@ object Repl {
         proc
     }
 
-    private def parseArgs(args: List[String]): (Boolean, List[String]) =
-        args match {
-            case "-install"::rem => (true, rem)
-            case rem => (false, rem)
-        }
-
     private def repl(isInstall: Boolean, args: List[String]): Unit = {
         val proc: Processor = initProcessor(isInstall)
         processorOpt = Some(proc)
