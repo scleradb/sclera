@@ -29,13 +29,15 @@ object ScleraConfig {
 
     private val defaultConfig: Config = ConfigFactory.defaultReference()
 
-    val configFileOpt: Option[String] =
-        try Option(defaultConfig.getString("sclera.app.conf"))
+    val configFileOpt: Option[File] =
+        try Option(defaultConfig.getString("sclera.app.conf")).map(new File(_))
         catch { case (_: ConfigException.Missing) => None }
 
-    private val config: Config = configFileOpt.map { conf =>
-        ConfigFactory.load(ConfigFactory.parseFile(new File(conf)))
-    } getOrElse defaultConfig
+    private val config: Config = configFileOpt match {
+        case Some(f) if f.exists =>
+            ConfigFactory.load(ConfigFactory.parseFile(f))
+        case _ => ConfigFactory.load("sclera")
+    }
 
     def configFile: String = config.origin().description()
 
