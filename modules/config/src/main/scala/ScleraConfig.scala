@@ -76,7 +76,8 @@ object ScleraConfig {
     def dataDir: File = new File(getStringOpt("sclera.storage.datadir").get)
     def objectDir: File = new File(getStringOpt("sclera.storage.objectdir").get)
 
-    def serviceAssetDir: String = getStringOpt("sclera.service.assetdir").get
+    def serviceAssetDir: File =
+        new File(getStringOpt("sclera.service.assetdir").get)
 
     def defaultMLService: String =
         getStringOpt("sclera.service.default.mlservice").get
@@ -155,7 +156,7 @@ object ScleraConfig {
         "sclera.location.tempdb.config" -> tempDbConfig.mkString(", "),
         "sclera.location.tempdb.database" -> tempDb,
         "sclera.location.tempdb.dbms" -> tempDbms,
-        "sclera.service.assetdir" -> serviceAssetDir,
+        "sclera.service.assetdir" -> serviceAssetDir.getCanonicalPath,
         "sclera.service.default.mlservice" -> defaultMLService,
         "sclera.service.default.nlpservice" -> defaultNlpService,
         "sclera.service.default.predicaterowlabelerservice" ->
