@@ -274,9 +274,9 @@ object Repl {
         println
     }
 
-    private def initProcessor(isInstall: Boolean): Processor = {
-        val proc: Processor = Processor()
-        try proc.init(isInstall) catch {
+    private def initProcessor(checkSchema: Boolean): Processor = {
+        val proc: Processor = Processor(checkSchema = checkSchema)
+        try proc.init() catch {
             case (e: SQLWarning) =>
                 logException(e, logger.warn, Some("SQL Warning"))
 
@@ -290,18 +290,12 @@ object Repl {
         proc
     }
 
-    private def repl(isInstall: Boolean, args: List[String]): Unit = {
-        val proc: Processor = initProcessor(isInstall)
+    private def repl(args: List[String], checkSchema: Boolean): Unit = {
+        val proc: Processor = initProcessor(checkSchema)
         processorOpt = Some(proc)
 
-        try args.lastOption.map(inp => inp.trim.toUpperCase) match {
-            case Some("EXIT" | "QUIT") =>
-                args.init.foreach(handleInputInteractive)
-
-            case _ =>
-                args.foreach(handleInputInteractive)
-                if( args.isEmpty ) println
-
+        try args match {
+            case Nil =>
                 println("Welcome to Sclera " + ScleraConfig.version)
                 println("[" + ScleraConfig.rootDir.getCanonicalPath + "]")
                 println
@@ -309,6 +303,9 @@ object Repl {
                 consoleIter(ScleraConfig.prompt, handleInputInteractive)
 
                 println
+
+            case sqls =>
+                sqls.foreach(handleInputInteractive)
         } catch {
             case (e: EndOfFileException) =>
                 println("Goodbye!")
@@ -330,8 +327,8 @@ object Repl {
     }
 
     def main(args: Array[String]): Unit = args.toList match {
-        case "-loggerconfig"::_ => printLoggerConfig()
-        case "-install"::rem => repl(true, rem)
-        case rem => repl(false, rem)
+        case "--loggerconfig"::_ => printLoggerConfig()
+        case "--init"::rem => repl("create schema"::rem, checkSchema = false)
+        case rem => repl(rem, checkSchema = true)
     }
 }
