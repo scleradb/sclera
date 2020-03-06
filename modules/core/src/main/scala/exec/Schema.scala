@@ -40,10 +40,10 @@ private[scleradb]
 class Schema(
     processor: Processor,
     schemaDbms: String,
-    schemaDbName: String,
+    schemaDb: String,
     schemaDbConfig: List[(String, String)],
     tempDbms: String,
-    tempDbName: String,
+    tempDb: String,
     tempDbConfig: List[(String, String)]
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
@@ -52,7 +52,7 @@ class Schema(
     private val schemaLocation: Location = {
         try Location(
             this, Location.schemaLocationId,
-            schemaDbms, schemaDbName, None, schemaDbConfig, ReadWriteLocation
+            schemaDbms, schemaDb, None, schemaDbConfig, ReadWriteLocation
         ) catch { case (e: Throwable) =>
             throw new IllegalArgumentException("Unable to configure schema", e)
         }
@@ -86,7 +86,7 @@ class Schema(
         // create and add a temporary main-memory location
         val tempLocation: Location = Location(
             this, Location.tempLocationId,
-            tempDbms, tempDbName, None, tempDbConfig, ReadWriteLocation
+            tempDbms, tempDb, None, tempDbConfig, ReadWriteLocation
         )
 
         val tempDbHandler: DbHandler = DbHandler(tempLocation)
