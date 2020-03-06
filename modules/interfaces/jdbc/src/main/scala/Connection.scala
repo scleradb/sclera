@@ -44,11 +44,10 @@ class Connection(
 
     private var isClosedStatus: Boolean = false
 
-    override def close(): Unit =
-        if( !isClosedStatus ) {
-            processor.close()
-            isClosedStatus = true
-        }
+    override def close(): Unit = if( !isClosedStatus ) {
+        processor.close()
+        isClosedStatus = true
+    }
 
     override def isClosed(): Boolean = isClosedStatus
     override def isValid(timeout: Int): Boolean = !isClosed()
