@@ -54,16 +54,16 @@ class Processor(
     schemaDbConfig: List[(String, String)],
     tempDbms: String,
     tempDb: String,
-    tempDbConfig: List[(String, String)]
+    tempDbConfig: List[(String, String)],
+    checkSchema: Boolean
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
 
-    lazy val schema: Schema =
-        new Schema(
-            this,
-            schemaDbms, schemaDb, schemaDbConfig,
-            tempDbms, tempDb, tempDbConfig
-        )
+    lazy val schema: Schema = new Schema(
+        processor = this, schemaDbms = schemaDbms,
+        schemaDb = schemaDb, schemaDbConfig = schemaDbConfig,
+        tempDbms = tempDbms, tempDb = tempDb, tempDbConfig = tempDbConfig
+    )
 
     def dataCacheLocation = Location.dataCacheLocation(schema)
 
@@ -77,12 +77,9 @@ class Processor(
     val planExplain: PlanExplain =
         new PlanExplain(normalizer, planner, scalExprEvaluator)
 
-    def init(isInstall: Boolean = false): Unit = {
+    def init(): Unit = {
         schema.init()
-        if( isInstall ) {
-            logger.info("Creating schema on install")
-            schema.createSchema()
-        } else schema.checkSchemaStore()
+        if( checkSchema ) schema.checkSchemaStore()
     }
 
     def locationDbHandler(locationId: LocationId): DbHandler =
@@ -957,12 +954,17 @@ object Processor {
         schemaDbConfig: List[(String, String)] = ScleraConfig.schemaDbConfig,
         tempDbms: String = ScleraConfig.tempDbms,
         tempDb: String = ScleraConfig.tempDb,
-        tempDbConfig: List[(String, String)] = ScleraConfig.tempDbConfig
-    ): Processor =
-        new Processor(
-            schemaDbms, schemaDb, schemaDbConfig,
-            tempDbms, tempDb, tempDbConfig
-        )
+        tempDbConfig: List[(String, String)] = ScleraConfig.tempDbConfig,
+        checkSchema: Boolean = true
+    ): Processor = new Processor(
+        schemaDbms = schemaDbms,
+        schemaDb = schemaDb,
+        schemaDbConfig = schemaDbConfig,
+        tempDbms = tempDbms,
+        tempDb = tempDb,
+        tempDbConfig = tempDbConfig,
+        checkSchema = checkSchema
+    )
 
     def apply(info: java.util.Properties): Processor = {
         val schemaDbms: String =
@@ -998,9 +1000,19 @@ object Processor {
                 }
             } getOrElse ScleraConfig.tempDbConfig
 
+        val checkSchema: Boolean =
+            Option(info.getProperty("checkSchema")).flatMap { boolStr =>
+                boolStr.toBooleanOption
+            } getOrElse true
+
         apply(
-            schemaDbms, schemaDb, schemaDbConfig,
-            tempDbms, tempDb, tempDbConfig
+            schemaDbms = schemaDbms,
+            schemaDb = schemaDb,
+            schemaDbConfig = schemaDbConfig,
+            tempDbms = tempDbms,
+            tempDb = tempDb,
+            tempDbConfig = tempDbConfig,
+            checkSchema = checkSchema
         )
     }
 }
