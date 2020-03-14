@@ -112,7 +112,7 @@ lazy val jdbc = Project(
     id = "sclera-jdbc",
     base = file("modules/interfaces/jdbc")
 ) dependsOn (
-    core % "provided"
+    core % "provided", config % "test"
 )
 
 lazy val shell = Project(
