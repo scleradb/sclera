@@ -2,7 +2,14 @@ name := "sclera-core"
 
 description := "Sclera core, classes for Sclera extension development in Scala"
 
-apiURL := Some(url("https://scleradb.github.io/sclera-core-sdk/"))
+homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+
+scmInfo := Some(
+    ScmInfo(
+        url(s"https://github.com/scleradb/${name.value}"),
+        s"scm:git@github.com:scleradb/${name.value}.git"
+    )
+)
 
 libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
@@ -11,7 +18,5 @@ libraryDependencies ++= Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3" % "provided",
     "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 )
-
-publishArtifact in (Compile, packageDoc) := true
 
 fork in Test := true

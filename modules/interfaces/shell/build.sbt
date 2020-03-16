@@ -2,6 +2,15 @@ name := "sclera-shell"
 
 description := "Sclera interactive shell"
 
+homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+
+scmInfo := Some(
+    ScmInfo(
+        url(s"https://github.com/scleradb/${name.value}"),
+        s"scm:git@github.com:scleradb/${name.value}.git"
+    )
+)
+
 libraryDependencies ++= Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3" % "provided",
     "org.jline" % "jline-terminal-jansi" % "3.13.1",

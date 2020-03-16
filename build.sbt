@@ -2,26 +2,22 @@ name := "sclera"
 
 description := "Sclera Analytics Visualization Platform"
 
-publish / skip := true
+homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+
+scmInfo := Some(
+    ScmInfo(
+        url(s"https://github.com/scleradb/${name.value}"),
+        s"scm:git@github.com:scleradb/${name.value}.git"
+    )
+)
 
 ThisBuild / version := "4.0-SNAPSHOT"
 
-ThisBuild / homepage := Some(url("https://github.com/scleradb/sclera"))
-
-ThisBuild / organization := "com.scleradb"
-
-ThisBuild / organizationName := "Sclera, Inc."
-
-ThisBuild / organizationHomepage := Some(url("https://www.scleradb.com"))
-
 ThisBuild / startYear := Some(2012)
-
-ThisBuild / scalaVersion := "2.13.1"
 
 ThisBuild / licenses := Seq("Apache License version 2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-ThisBuild / resolvers +=
-    "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
+ThisBuild / scalaVersion := "2.13.1"
 
 ThisBuild / scalacOptions ++= Seq(
     "-Werror", "-feature", "-deprecation", "-unchecked",
@@ -30,11 +26,14 @@ ThisBuild / scalacOptions ++= Seq(
     "-target:8"
 )
 
-ThisBuild / publishArtifact in (Compile, packageDoc) := false
-
 ThisBuild / exportJars := true
 
 ThisBuild / autoAPIMappings := true
+
+ThisBuild / resolvers +=
+    "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
+
+publish / skip := true
 
 lazy val sclera = Project(
     id = "sclera",
