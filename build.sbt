@@ -22,8 +22,7 @@ ThisBuild / scalaVersion := "2.13.1"
 ThisBuild / scalacOptions ++= Seq(
     "-Werror", "-feature", "-deprecation", "-unchecked",
     "-Dscalac.patmat.analysisBudget=2048",
-    "-Ypatmat-exhaust-depth", "40",
-    "-target:8"
+    "-Ypatmat-exhaust-depth", "40"
 )
 
 ThisBuild / exportJars := true
