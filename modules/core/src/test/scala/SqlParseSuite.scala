@@ -48,8 +48,10 @@ class SqlParseSuite extends AnyFunSpec with CancelAfterFailure {
         )
 
         it("should setup") {
-            processor = Processor()
-            processor.init()
+            processor = Processor(checkSchema = true)
+            try processor.init() catch { case (_: java.sql.SQLWarning) =>
+                processor.schema.createSchema()
+            }
         }
 
         // needs embedded schema, cache dbs to work

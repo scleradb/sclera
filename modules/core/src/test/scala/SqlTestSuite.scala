@@ -30,8 +30,10 @@ class SqlTestSuite extends AnyFunSpec with CancelAfterFailure {
 
     describe("Sql Query Processing") {
         it("should setup") {
-            processor = Processor()
-            processor.init()
+            processor = Processor(checkSchema = false)
+            try processor.init() catch { case (_: java.sql.SQLWarning) =>
+                processor.schema.createSchema()
+            }
         }
 
         it("should execute the SQL queries") {
