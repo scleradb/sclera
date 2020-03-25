@@ -19,4 +19,8 @@ libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 )
 
+javaOptions in Test ++= Seq(
+    s"-DSCLERA_ROOT=${java.nio.file.Files.createTempDirectory("scleratest")}"
+)
+
 fork in Test := true
