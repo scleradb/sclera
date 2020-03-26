@@ -27,15 +27,15 @@ import org.scalatest.funspec.AnyFunSpec
 class JDBCTestSuite extends AnyFunSpec with CancelAfterFailure {
     val jdbcUrl: String = "jdbc:scleradb"
 
-    val props: Properties = new Properties()
-    props.setProperty("connectTimeout", "10")
-    props.setProperty("loginTimeout", "10")
-
     var conn: Connection = null
     var stmt: Statement = null
             
     describe("JDBC driver") {
         it("should return a valid connection") {
+            val props: Properties = new Properties()
+            props.setProperty("connectTimeout", "10")
+            props.setProperty("loginTimeout", "10")
+
             conn = DriverManager.getConnection(jdbcUrl, props)
         }
 
