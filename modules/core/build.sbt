@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
     "com.h2database" % "h2" % "1.4.200",
     "com.zaxxer" % "HikariCP" % "3.4.1",
     "ch.qos.logback" % "logback-classic" % "1.2.3" % "provided",
-    "org.scalatest" %% "scalatest" % "3.1.0" % "test"
+    "org.scalatest" %% "scalatest" % "3.1.1" % "test"
 )
 
 javaOptions in Test ++= Seq(
