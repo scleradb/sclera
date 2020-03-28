@@ -1,5 +1,7 @@
 # Sclera Analytics Virtualization Platform
 
+[![Build Status](https://travis-ci.org/scleradb/sclera.svg?branch=master)](https://travis-ci.org/scleradb/sclera)
+
 Sclera is a stand-alone SQL processor with native support for analytics, data virtualization, and streaming data. Sclera can be deployed as an independent application, or can embed within your applications to enable advanced real-time analytics capabilities.
 
 - [Website](https://scleradb.com)
