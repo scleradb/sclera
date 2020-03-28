@@ -102,20 +102,18 @@ object Location {
         )
     }
 
-    def configLocation(param: String, locId: LocationId): Unit = {
+    def configLocation(param: String, locId: LocationId): Unit =
         param.toUpperCase match {
             case "DEFAULT" => defaultLocationIdOpt = Some(locId)
             case "CACHE" => dataCacheLocationIdVar = locId
         }
-    }
 
     def isDefault(locId: LocationId): Boolean = defaultLocationIdOpt match {
-            case None => true
-            case Some(defLocId) => locId == defLocId
-        }
+        case None => true
+        case Some(defLocId) => locId == defLocId
+    }
 
-    def isCache(locId: LocationId): Boolean =
-        locId == dataCacheLocationId
+    def isCache(locId: LocationId): Boolean = locId == dataCacheLocationId
 
     def locationIds(schema: Schema): List[LocationId] = schema.locationIds
     def locations(schema: Schema): List[Location] = schema.locations
@@ -193,5 +191,5 @@ case class LocationId(name: String) {
             throw new IllegalArgumentException(
                 "Uninitialized location: " + repr
             )
-    }
+        }
 }
