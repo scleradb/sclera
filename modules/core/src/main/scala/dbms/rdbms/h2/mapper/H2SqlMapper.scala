@@ -416,6 +416,15 @@ class H2SqlMapper(loc: Location) extends SqlMapper {
             "(" + exprString(expr) + ") BETWEEN " + rangeQualStr +
             " (" + exprString(lhs) + ") AND (" + exprString(rhs) + ")"
 
+        case ScalOpExpr(cmpOp: ScalRelCmpOp, List(ColRef(lhs), ColRef(rhs))) =>
+            lhs + " " + cmpOpString(cmpOp) + " " + rhs
+
+        case ScalOpExpr(cmpOp: ScalRelCmpOp, List(ColRef(lhs), rhs)) =>
+            lhs + " " + cmpOpString(cmpOp) + " (" + exprString(rhs) + ")"
+
+        case ScalOpExpr(cmpOp: ScalRelCmpOp, List(lhs, ColRef(rhs))) =>
+            "(" + exprString(lhs) + ") " + cmpOpString(cmpOp) + " " + rhs
+
         case ScalOpExpr(cmpOp: ScalRelCmpOp, List(lhs, rhs)) =>
             "(" + exprString(lhs) + ") " + cmpOpString(cmpOp) +
             " (" + exprString(rhs) + ")"
