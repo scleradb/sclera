@@ -331,7 +331,8 @@ class PostgreSQLMapper(locOpt: Option[Location]) extends SqlMapper {
         case BoolConst(value) => value.toString
 
         case CharConst(value) =>
-            "'" + value.replaceAll("'", "''") + "'::CHAR(" + value.size + ")"
+            "'" + value.replaceAll("'", "''") +
+            "'::CHAR(" + (value.size max 1) + ")"
 
         case DateConst(value) => "'" + value.toString + "'"
 

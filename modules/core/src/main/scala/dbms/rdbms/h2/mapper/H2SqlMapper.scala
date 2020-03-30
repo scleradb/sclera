@@ -325,7 +325,7 @@ class H2SqlMapper(loc: Location) extends SqlMapper {
 
         case CharConst(value) =>
             "CAST('" + value.replaceAll("'", "''") +
-            "' AS CHAR(" + value.size + "))"
+            "' AS CHAR(" + (value.size max 1) + "))"
 
         case DateConst(value) => "'" + value.toString + "'"
 
