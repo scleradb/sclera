@@ -31,7 +31,7 @@ import com.scleradb.sql.objects._
 
 /** Table/table-like (relational) expressions */
 abstract class RelExpr extends LogicalExpr {
-    /** Preferred location of the result if materialized, None otherwise */
+    /** Location of the result if materialized, None otherwise */
     val locationIdOpt: Option[LocationId]
 
     /** Is this expression root evaluable as a stream?  */
