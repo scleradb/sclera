@@ -187,7 +187,7 @@ case class CaseExpr(
         CaseExpr(updatedArgExpr, updatedWhenThen, updatedDefaultExpr)
     }
 
-    override def defaultAlias: String = "`CASE`"
+    override def defaultAlias: String = "CASE"
 }
 
 /** Abstract base class for base scalar expressions */
@@ -481,7 +481,7 @@ case class SqlTypedNull(
     override val sqlBaseType: SqlType
 ) extends SqlNull {
     override def isNull: Boolean = true
-    override def defaultAlias: String = "`NULL`"
+    override def defaultAlias: String = "NULL"
     override def coverValue: Option[Any] = None
 }
 
@@ -492,7 +492,7 @@ object SqlNull {
 
 /** Row of a table, specified as a list of scalar values */
 case class Row(scalars: List[ScalColValue]) extends ScalValue {
-    override def defaultAlias: String = "`ROW`"
+    override def defaultAlias: String = "ROW"
 }
 
 // pattern string, with associated escape sequence
@@ -522,7 +522,7 @@ case class ScalSubQuery(relExpr: RelExpr) extends ScalSubQueryBase {
 private[scleradb]
 case class Exists(relExpr: RelExpr) extends ScalSubQueryBase {
     override def columns: Set[ColRefBase] = Set()
-    override def defaultAlias: String = "`EXISTS`"
+    override def defaultAlias: String = "EXISTS"
 }
 
 // relational side of a scalar/relational comparison
