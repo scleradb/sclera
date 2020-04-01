@@ -502,7 +502,7 @@ class H2SqlMapper(loc: Location) extends SqlMapper {
         case StarTargetExpr(Some((tname, None)), Nil) => tname + ".*"
         case StarTargetExpr(None, Nil) => "*"
         case (t: ScalarTarget) =>
-            "(" + exprString(t.expr) + ") AS " + exprString(t.alias)
+            "(" + exprString(t.expr) + ") AS `" + t.alias.name + "`"
         case _ => throw new RuntimeException("Cannot map (H2): " + targetExpr)
     }
 
