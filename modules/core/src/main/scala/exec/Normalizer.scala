@@ -131,7 +131,10 @@ class Normalizer(
             normalizeUpdateTable(SqlInsertValueRows(tableId, targetCols, rows))
 
         case SqlInsertQueryResult(tableId, targetCols, query) =>
-            SqlInsertQueryResult(tableId, targetCols, normalizeRelExpr(query))
+            SqlInsertQueryResult(
+                tableId, targetCols,
+                normalizeRelExpr(query, Some(tableId.locationId))
+            )
 
         case SqlUpdate(tableId, colValPairs, pred) =>
             val tableRef: TableRefSource = TableRefSourceById(schema, tableId)
@@ -175,7 +178,7 @@ class Normalizer(
         case sqlTable@SqlTable(_, _, None) => sqlTable
 
         case SqlTable(table, locIdOpt, Some(relExpr)) =>
-            val baseRelExpr: RelExpr = normalizeRelExpr(relExpr)
+            val baseRelExpr: RelExpr = normalizeRelExpr(relExpr, locIdOpt)
             if( baseRelExpr.tableColRefs.size != table.columns.size ) {
                 throw new IllegalArgumentException(
                     "The table definition is not compatible" +
@@ -191,7 +194,10 @@ class Normalizer(
         case _ => throw new RuntimeException("Cannot normalize object: " + obj)
     }
 
-    def normalizeRelExpr(relExpr: RelExpr): RelExpr = {
+    def normalizeRelExpr(
+        relExpr: RelExpr,
+        targetLocationIdOpt: Option[LocationId] = None
+    ): RelExpr = {
         val viewExpandedRelExpr: RelExpr = expandViews(relExpr)
 
         val (rootNormalized, rootColMap) =
@@ -226,25 +232,36 @@ class Normalizer(
                     RenameCol(col, uniqueAlias(takenAliases, alias))::prev
             }
 
+        // println
+        // println(
+        //     "[RootNormalized]" + rootNormalized + " -> " +
+        //     rootNormalized.locationIdOpt
+        // )
+
         // rename after evaluation so that the sort order is not lost
         val normalizedInp: RelExpr =
-            if( rootNormalized.locationIdOpt.isEmpty ) rootNormalized
+            if( rootNormalized.locationIdOpt == targetLocationIdOpt )
+                rootNormalized
             else RelOpExpr(EvaluateOp, List(rootNormalized))
 
         val normalizedRelExpr: RelExpr =
             RelOpExpr(Project(uniqueRenameCols.reverse), List(normalizedInp))
 
-        // println
-        // println("[Normalized]" + normalizedRelExpr + " -> " +
-        //         normalizedRelExpr.resultOrder)
+        //  println
+        //  println(
+        //      "[Normalized]" + normalizedRelExpr + " -> " +
+        //      normalizedRelExpr.resultOrder
+        //  )
 
         val seqAugmentedRelExpr: RelExpr =
             if( isSeqEnabled ) augmentSequenceOps(normalizedRelExpr, Map())
             else normalizedRelExpr
 
-        // println
-        // println("[Augmented]" + seqAugmentedRelExpr + " -> " +
-        //         seqAugmentedRelExpr.resultOrder)
+        //   println
+        //  println(
+        //      "[Augmented]" + seqAugmentedRelExpr + " -> " +
+        //      seqAugmentedRelExpr.resultOrder
+        //  )
 
         val locAssignedRelExpr: RelExpr =
             assignEvalLocation(seqAugmentedRelExpr)
@@ -2159,10 +2176,10 @@ class Normalizer(
         case (value: ScalValue) => value
 
         case ScalSubQuery(relExpr) =>
-            ScalSubQuery(normalizeRelExpr(relExpr))
+            ScalSubQuery(normalizeRelExpr(relExpr, relExpr.locationIdOpt))
 
         case Exists(relExpr) =>
-            Exists(normalizeRelExpr(relExpr))
+            Exists(normalizeRelExpr(relExpr, relExpr.locationIdOpt))
 
         case ScalCmpRelExpr(qual, subQueryOrList) =>
             ScalCmpRelExpr(qual, normalizeRelSubQuery(subQueryOrList))
@@ -2176,20 +2193,23 @@ class Normalizer(
     ): RelSubQueryBase = expr match {
         case (scalarList: ScalarList) => scalarList
 
-        case RelSubQuery(query) => normalizeRelExpr(query) match {
-            case Values(_, rows@(row::_)) if row.scalars.size == 1 =>
-                val scalars: List[ScalColValue] = rows.map {
-                    case Row(List(v)) => v
-                    case r =>
-                        throw new IllegalArgumentException(
-                            "Found \"" + r.repr + "\", expected singleton value"
-                        )
-                }
+        case RelSubQuery(query) =>
+            normalizeRelExpr(query, query.locationIdOpt) match {
+                case Values(_, rows@(row::_)) if row.scalars.size == 1 =>
+                    val scalars: List[ScalColValue] = rows.map {
+                        case Row(List(v)) => v
+                        case r =>
+                            throw new IllegalArgumentException(
+                                "Found \"" + r.repr +
+                                "\", expected singleton value"
+                            )
+                    }
 
-                ScalarList(scalars)
+                    ScalarList(scalars)
 
-            case relExpr => RelSubQuery(relExpr)
-        }
+                case relExpr =>
+                    RelSubQuery(relExpr)
+            }
 
         case _ =>
             throw new RuntimeException("Cannot normalize subquery: " + expr)
