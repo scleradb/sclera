@@ -23,7 +23,7 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.types.SqlOption
 import com.scleradb.sql.objects._
 
-import com.scleradb.sql.mapper.default.{PostgreSQLMapper => SqlMapper}
+import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 
 import com.scleradb.analytics.ml.classifier.objects._
 import com.scleradb.analytics.ml.clusterer.objects._

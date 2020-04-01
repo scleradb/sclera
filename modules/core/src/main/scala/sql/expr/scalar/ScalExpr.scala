@@ -25,7 +25,7 @@ import java.sql.{Time, Timestamp, Date, Blob, Clob}
 import com.scleradb.sql.types._
 import com.scleradb.sql.exec.ScalCastEvaluator
 
-import com.scleradb.sql.mapper.default.{PostgreSQLMapper => SqlMapper}
+import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 
 /** Abstract base class for all scalar expressions */
 sealed abstract class ScalExpr extends Serializable {

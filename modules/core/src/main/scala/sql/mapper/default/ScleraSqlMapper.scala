@@ -31,8 +31,7 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.mapper._
 import com.scleradb.sql.mapper.target._
 
-private[scleradb]
-class PostgreSQLMapper(locOpt: Option[Location]) extends SqlMapper {
+class ScleraSQLMapper(locOpt: Option[Location]) extends SqlMapper {
     private def annotTableName(name: String): String =
         locOpt.map { loc => loc.annotTableName(name) } getOrElse name
 
@@ -650,6 +649,5 @@ class PostgreSQLMapper(locOpt: Option[Location]) extends SqlMapper {
     )
 }
 
-// SQL mapper for Sclera user interface
-private[scleradb]
-object PostgreSQLMapper extends PostgreSQLMapper(None)
+// SQL mapper for Sclera
+object ScleraSQLMapper extends ScleraSQLMapper(None)

@@ -21,7 +21,7 @@ import java.sql.Types
 import java.sql.{Time, Timestamp, Date, Blob, Clob}
 
 import com.scleradb.api._
-import com.scleradb.sql.mapper.default.{PostgreSQLMapper => SqlMapper}
+import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 
 /** Abstract base class for all SQL types */
 sealed abstract class SqlType {

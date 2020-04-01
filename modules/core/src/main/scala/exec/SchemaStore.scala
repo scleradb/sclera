@@ -41,7 +41,7 @@ import com.scleradb.sql.datatypes._
 import com.scleradb.sql.expr._
 import com.scleradb.sql.statements._
 import com.scleradb.sql.parser._
-import com.scleradb.sql.mapper.default.{PostgreSQLMapper => SqlMapper}
+import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 
 import com.scleradb.analytics.ml.objects.{MLObjectId, SchemaMLObject}
 
