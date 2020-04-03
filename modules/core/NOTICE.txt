@@ -7,3 +7,4 @@ Scala Parser Combinators - Apache License v2.0 - http://www.apache.org/licenses/
 H2 Database - Mozzila Public License v2.0 / Eclipse Public License v1.0 - https://h2database.com/html/license.html
 HikariCP - Apache License v2.0 - http://www.apache.org/licenses/LICENSE-2.0
 Logback Classic - Eclipse Public License v1.0 - http://logback.qos.ch/license.html
+ScalaTest - Apache License v2.0 - http://www.apache.org/licenses/LICENSE-2.0
