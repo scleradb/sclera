@@ -67,7 +67,7 @@ trait ReplParser extends SqlQueryParser with SqlAdminParser with PlotParser {
         failure("Incorrect command")
 
     private def displayCommand: Parser[DisplayCommand] =
-        ("START" | "STOP") ~ rep(rawCharConst) ^^ {
+        ("START" | "STOP") ~ rep(ident | rawCharConst | numericLit) ^^ {
             case "START"~params => DisplayStart(params)
             case "STOP"~params => DisplayStop(params)
             case _ => throw new IllegalArgumentException("Incorrect command")
