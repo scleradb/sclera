@@ -26,16 +26,17 @@ private[scleradb]
 case class ExternalSourceEvalPlan(
     override val relExpr: ExternalSourceExpr
 ) extends RelEvalPlan {
+    private var tableResultOpt: Option[TableResult] = None
+
     override def init(): Unit = { }
 
-    private var tableResultOpt: Option[TableResult] = None
     override def result: RelEvalPlanResult = {
-        val tableResult: TableResult =
-            tableResultOpt getOrElse relExpr.source.result
+        val tableResult: TableResult = relExpr.source.result
+        tableResultOpt = Some(tableResult)
 
         RelEvalPlanResult(tableResult)
     }
 
-    def dispose(): Unit =
+    override def dispose(): Unit =
         tableResultOpt.foreach { tableResult => tableResult.close() }
 }
