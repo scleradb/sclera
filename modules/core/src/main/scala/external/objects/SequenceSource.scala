@@ -46,6 +46,7 @@ class SequenceSource(n: Int) extends ExternalSource {
     override def toString: String = name + "[" + n + "] AS (" + colName + ")"
 }
 
+private[scleradb]
 object SequenceSource {
     def apply(n: Int): SequenceSource = new SequenceSource(n)
 }
