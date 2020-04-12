@@ -21,6 +21,7 @@ import com.scleradb.sql.types.SqlType
 import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.expr.{ScalExpr, ScalColValue}
 
+private[scleradb]
 abstract class Transformer {
     def outputColTypes(
         inputColTypes: Map[String, SqlType]

@@ -21,7 +21,6 @@ import com.scleradb.sql.expr.{RelExpr, ProjectBase, ExtendedRelOp}
 import com.scleradb.sql.expr.{ColRef, AnnotColRef, SortExpr}
 import com.scleradb.sql.expr.{TargetExpr, AliasedExpr, ScalarTarget, RenameCol}
 
-private[scleradb]
 case class InferTypes(
     cols: List[ColRef],
     nulls: List[String],

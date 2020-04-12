@@ -27,7 +27,6 @@ import com.scleradb.sql.result.{TableResult, TableRow, ScalTableRow}
 
 import com.scleradb.analytics.infertypes.expr.InferTypes
 
-private[scleradb]
 class InferTypesTableResult(
     override val columns: List[Column],
     override val rows: Iterator[TableRow],

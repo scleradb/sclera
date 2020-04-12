@@ -42,6 +42,7 @@ sealed abstract class Transform extends ExtendedRelOp {
     override def tableNames(inputs: List[RelExpr]): List[String] = Nil
 }
 
+private[scleradb]
 object Transform {
     sealed abstract class TransformType
     case object Join extends TransformType
