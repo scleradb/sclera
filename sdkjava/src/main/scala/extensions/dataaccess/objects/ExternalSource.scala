@@ -40,9 +40,6 @@ abstract class ExternalSource extends ScalaExternalSource {
                 )
         }
 
-    /** Sort order of the rows emitted by the data source */
-    def sortExprs: Array[SortExpr]
-
     /** The rows emitted by the data source */
     override def result: TableResult
 }
