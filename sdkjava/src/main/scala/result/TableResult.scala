@@ -51,7 +51,6 @@ abstract class TableResult extends ScalaTableResult {
     override def close(): Unit
 }
 
-private[scleradb]
 object TableResult {
     def apply(result: ScalaTableResult): TableResult = new TableResult {
         override def columnsArray: Array[Column] = result.columns.toArray

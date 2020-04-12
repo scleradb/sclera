@@ -24,7 +24,6 @@ import com.scleradb.analytics.sequence.matcher.aggregate._
 import com.scleradb.analytics.sequence.labeler.ColumnRowLabeler
 import com.scleradb.analytics.sequence.matcher.LabelSequenceMatcher
 
-private[scleradb]
 object Pivot {
     def apply(
         funcName: String,

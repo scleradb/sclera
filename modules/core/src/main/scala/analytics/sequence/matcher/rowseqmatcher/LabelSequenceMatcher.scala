@@ -25,7 +25,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow}
 
 import com.scleradb.analytics.sequence.matcher.aggregate._
 
-private[scleradb]
 class LabelSequenceMatcher(
     override val aggregateRowsSpec: SeqAggregateRowsSpec,
     override val partitionCols: List[ColRef],
@@ -77,7 +76,6 @@ class LabelSequenceMatcher(
         (if( isPartnColsInResult ) "" else "(hidden)") + "]"
 }
 
-private[scleradb]
 object LabelSequenceMatcher {
     def apply(
         aggregateRowsSpec: SeqAggregateRowsSpec,

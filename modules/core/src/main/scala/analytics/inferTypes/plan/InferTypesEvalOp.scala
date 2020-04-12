@@ -24,7 +24,6 @@ import com.scleradb.sql.result.TableResult
 import com.scleradb.analytics.infertypes.datatypes.InferTypesTableResult
 
 // generic transform
-private[scleradb]
 case class InferTypesEvalOp(
     cols: List[ColRef],
     nulls: List[String],

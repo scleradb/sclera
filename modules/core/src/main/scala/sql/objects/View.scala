@@ -42,12 +42,10 @@ object View {
     def apply(name: String, expr: RelExpr): View = new View(name, expr)
 }
 
-private[scleradb]
 case class ViewId(override val name: String) extends RelationId {
     override def repr: String = name.toUpperCase
 }
 
-private[scleradb]
 class SchemaView(override val obj: View) extends SchemaRelation {
     override val id: ViewId = ViewId(obj.name)
 
@@ -56,7 +54,6 @@ class SchemaView(override val obj: View) extends SchemaRelation {
     override def locationIdOpt: Option[LocationId] = None
 }
 
-private[scleradb]
 object SchemaView {
     def apply(view: View): SchemaView = new SchemaView(view)
 

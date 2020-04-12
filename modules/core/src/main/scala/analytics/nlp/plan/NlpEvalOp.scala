@@ -23,7 +23,6 @@ import com.scleradb.sql.plan.{RelEvalOp, RelEvalPlanResult}
 
 import com.scleradb.analytics.nlp.expr.NlpRelOp
 
-private[scleradb]
 case class NlpEvalOp(op: NlpRelOp) extends RelEvalOp {
     override def eval(
         inputResults: List[RelEvalPlanResult],

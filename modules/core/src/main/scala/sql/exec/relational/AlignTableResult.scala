@@ -31,7 +31,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow, ConcatTableRow}
   * @param marginOpt Margin for matching (max lead/lag)
   * @param inputs Input streams
   */
-private[scleradb]
 class AlignTableResult(
     evaluator: ScalExprEvaluator,
     distExpr: ScalExpr,
@@ -125,7 +124,6 @@ class AlignTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object AlignTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

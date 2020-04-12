@@ -24,7 +24,6 @@ import scala.util.Try
 import com.scleradb.sql.types._
 import com.scleradb.sql.expr._
 
-private[scleradb]
 object ScalTypeInferer {
     private val inferInt: SqlType = SqlInteger
     private val inferLong: SqlType = SqlBigInt

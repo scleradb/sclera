@@ -41,5 +41,4 @@ abstract class DBService extends ScleraService {
     ): Location
 }
 
-private[scleradb]
 object DBService extends ScleraServiceLoader(classOf[DBService])

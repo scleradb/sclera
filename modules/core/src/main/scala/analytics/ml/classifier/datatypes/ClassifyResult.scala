@@ -23,7 +23,6 @@ import com.scleradb.sql.result.{TableResult, ExtendedTableRow}
 
 import com.scleradb.analytics.ml.classifier.objects.Classifier
 
-private[scleradb]
 class ClassifyResult(
     rs: TableResult,
     targetColRef: ColRef,

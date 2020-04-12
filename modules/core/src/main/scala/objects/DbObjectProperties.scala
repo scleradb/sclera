@@ -19,20 +19,14 @@ package com.scleradb.objects
 
 import com.scleradb.dbms.location.LocationId
 
-private[scleradb]
 abstract class DbObjectStatus
 
-private[scleradb]
 case class DbMaterialized(locIdOpt: Option[LocationId]) extends DbObjectStatus
 
-private[scleradb]
 case object DbVirtual extends DbObjectStatus
 
-private[scleradb]
 sealed abstract class DbObjectDuration
 
-private[scleradb]
 case object Temporary extends DbObjectDuration
 
-private[scleradb]
 case object Persistent extends DbObjectDuration

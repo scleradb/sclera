@@ -41,7 +41,6 @@ import com.scleradb.sql.result.TableRow
 
 import com.scleradb.config.ScleraConfig
 
-private[scleradb]
 abstract class SqlDriver extends StatementDriver {
     val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
 

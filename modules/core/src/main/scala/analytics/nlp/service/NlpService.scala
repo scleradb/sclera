@@ -43,7 +43,6 @@ abstract class NlpService extends ScleraService {
     ): NlpTask
 }
 
-private[scleradb]
 object NlpService extends ScleraServiceLoader(classOf[NlpService]) {
     def apply(idOpt: Option[String] = None): NlpService =
         apply(idOpt getOrElse ScleraConfig.defaultNlpService)

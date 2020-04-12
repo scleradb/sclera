@@ -54,7 +54,6 @@ import com.scleradb.analytics.sequence.matcher.expr.{Match, LabeledMatch, Pivot}
 import com.scleradb.analytics.infertypes.expr.InferTypes
 
 // SQL query parser
-private[scleradb]
 trait SqlQueryParser extends SqlParser {
     override def sqlStatement: Parser[SqlStatement] = sqlQueryStatement
 

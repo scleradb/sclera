@@ -23,7 +23,6 @@ import com.scleradb.sql.expr.{RelExpr, ExtendedRelOp, AnnotColRef, SortExpr}
 import com.scleradb.analytics.ml.objects.MLObjectId
 
 // machine learning extended relational operators
-private[scleradb]
 abstract class MLRelOp extends ExtendedRelOp {
     override def isStreamEvaluable(inputs: List[RelExpr]): Boolean = true
 

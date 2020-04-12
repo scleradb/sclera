@@ -23,7 +23,6 @@ import com.scleradb.sql.expr.{ColRef, RelExpr}
 import com.scleradb.sql.result.ScalTableRow
 
 // constant labeler -- no explicit labels assigned
-private[scleradb]
 case class ConstRowLabeler(label: Label) extends RowLabeler {
     override def requiredCols: List[ColRef] = Nil
 

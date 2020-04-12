@@ -28,7 +28,6 @@ import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 import com.scleradb.analytics.ml.classifier.objects._
 import com.scleradb.analytics.ml.clusterer.objects._
 
-private[scleradb]
 object DescribeObject {
     def describe(
         obj: SchemaObject,

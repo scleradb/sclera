@@ -22,7 +22,6 @@ import com.scleradb.sql.expr._
 import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.ScalTableRow
 
-private[scleradb]
 object ScalTypeEvaluator {
     // evalue the type of a constant expression
     def eval(

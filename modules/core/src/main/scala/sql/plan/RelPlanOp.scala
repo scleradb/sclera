@@ -42,18 +42,15 @@ import com.scleradb.sql.exec.AlignTableResult
 import com.scleradb.sql.exec.DisjointIntervalTableResult
 import com.scleradb.sql.exec.UnPivotTableResult
 
-private[scleradb]
 abstract class RelPlanOp {
     def init(): Unit = { /* empty */ }
     def dispose(): Unit = { /* empty */ }
 }
 
-private[scleradb]
 abstract class RelExprOp extends RelPlanOp {
     def expr(inputResults: List[RelExprPlanResult]): RelExprPlanResult
 }
 
-private[scleradb]
 case class RegularRelExprOp(
     preparedRelOp: RegularRelOp,
     opDepsPlans: List[RelExprPlan]
@@ -69,7 +66,6 @@ case class RegularRelExprOp(
     override def dispose(): Unit = opDepsPlans.map { plan => plan.dispose() }
 }
 
-private[scleradb]
 case class MaterializeRelExprOp(
     processor: Processor,
     tableName: String
@@ -100,7 +96,6 @@ case class MaterializeRelExprOp(
         createdTableIdOpt.foreach { id => processor.drop(id) }
 }
 
-private[scleradb]
 abstract class RelEvalOp extends RelPlanOp {
     def eval(
         inputResults: List[RelEvalPlanResult],
@@ -108,7 +103,6 @@ abstract class RelEvalOp extends RelPlanOp {
     ): RelEvalPlanResult
 }
 
-private[scleradb]
 sealed abstract class RelUnaryEvalOp extends RelEvalOp {
     val opDepsPlans: List[RelExprPlan]
 
@@ -141,7 +135,6 @@ sealed abstract class RelUnaryEvalOp extends RelEvalOp {
     override def dispose(): Unit = opDepsPlans.map { plan => plan.dispose() }
 }
 
-private[scleradb]
 sealed abstract class RelUnaryBatchEvalOp extends RelUnaryEvalOp {
     val processor: Processor
     val op: RelOp
@@ -161,7 +154,6 @@ sealed abstract class RelUnaryBatchEvalOp extends RelUnaryEvalOp {
         )
 }
 
-private[scleradb]
 case class RelUnaryFixedSizeBatchEvalOp(
     override val processor: Processor,
     override val op: RelOp,
@@ -176,7 +168,6 @@ case class RelUnaryFixedSizeBatchEvalOp(
         inputRows.grouped(batchSize).map { batch => batch.iterator }
 }
 
-private[scleradb]
 case class RelUnaryPartitionBatchEvalOp(
     override val processor: Processor,
     override val op: RelOp,
@@ -191,7 +182,6 @@ case class RelUnaryPartitionBatchEvalOp(
         ).map { group => group.rows }
 }
 
-private[scleradb]
 case class RelProjectEvalOp(
     evaluator: ScalExprEvaluator,
     targetExprs: List[ScalarTarget],
@@ -204,7 +194,6 @@ case class RelProjectEvalOp(
         ProjectTableResult(evaluator, targetExprs, inputResult, resOrder)
 }
 
-private[scleradb]
 case class RelSelectEvalOp(
     evaluator: ScalExprEvaluator,
     predExpr: ScalExpr,
@@ -217,7 +206,6 @@ case class RelSelectEvalOp(
         SelectTableResult(evaluator, predExpr, inputResult)
 }
 
-private[scleradb]
 case class RelLimitOffsetEvalOp(
     limitOpt: Option[Int],
     offset: Int,
@@ -230,7 +218,6 @@ case class RelLimitOffsetEvalOp(
         LimitOffsetTableResult(limitOpt, offset, inputResult)
 }
 
-private[scleradb]
 case class RelDistinctEvalOp(
     evaluator: ScalExprEvaluator,
     exprsOpt: Option[List[ScalExpr]],
@@ -243,7 +230,6 @@ case class RelDistinctEvalOp(
         DistinctTableResult(evaluator, exprsOpt, inputResult)
 }
 
-private[scleradb]
 case class RelEquiMergeJoinEvalOp(
     evaluator: ScalExprEvaluator,
     joinType: JoinType,
@@ -274,7 +260,6 @@ case class RelEquiMergeJoinEvalOp(
 }
 
 // nested loops join with lhs in the outer loop and rhs in the inner loop
-private[scleradb]
 case class RelEquiNestedLoopsJoinEvalOp(
     processor: Processor,
     joinType: JoinType,
@@ -310,7 +295,6 @@ case class RelEquiNestedLoopsJoinEvalOp(
 }
 
 // evaluate union by merging inputs one after another
-private[scleradb]
 case object RelUnionEvalOp extends RelEvalOp {
     override def eval(
         inputResults: List[RelEvalPlanResult],
@@ -337,7 +321,6 @@ case object RelUnionEvalOp extends RelEvalOp {
 }
 
 // sequence alignment
-private[scleradb]
 case class AlignEvalOp(
     evaluator: ScalExprEvaluator,
     distanceExpr: ScalExpr,
@@ -368,7 +351,6 @@ case class AlignEvalOp(
 }
 
 // create disjoint intervals from possibly overlapping intervals
-private[scleradb]
 case class DisjointIntervalEvalOp(
     evaluator: ScalExprEvaluator,
     inpLhsColRef: ColRef,
@@ -402,7 +384,6 @@ case class DisjointIntervalEvalOp(
 }
 
 // unpivot the input table given the specs
-private[scleradb]
 case class UnPivotEvalOp(
     outValCol: ColRef,
     outKeyCol: ColRef,
@@ -431,7 +412,6 @@ case class UnPivotEvalOp(
 }
 
 // update the result sort order (unlike Order, no sorting takes place)
-private[scleradb]
 case class OrderedByEvalOp(
     sortExprs: List[SortExpr]
 ) extends RelEvalOp {

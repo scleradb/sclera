@@ -25,12 +25,10 @@ import com.scleradb.config.ScleraConfig
 import com.scleradb.sql.expr.ScalExpr
 import com.scleradb.analytics.sequence.labeler.PredRowLabeler
 
-private[scleradb]
 abstract class PredLabelerService extends ScleraService {
     def createLabeler(predLabels: List[(ScalExpr, Label)]): PredRowLabeler
 }
 
-private[scleradb]
 object PredLabelerService extends ScleraServiceLoader(
     classOf[PredLabelerService]
 ) {

@@ -34,7 +34,6 @@ import com.scleradb.sql.result.TableRowGroupIterator
   * @param partnCols Partition columns
   * @param input Input stream
   */
-private[scleradb]
 class DisjointIntervalTableResult(
     evaluator: ScalExprEvaluator,
     lhsColRef: ColRef,
@@ -218,7 +217,6 @@ class DisjointIntervalTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object DisjointIntervalTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

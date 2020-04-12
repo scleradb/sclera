@@ -32,7 +32,6 @@ import com.scleradb.dbms.location.Location
 import com.scleradb.sql.expr._
 import com.scleradb.sql.types._
 
-private[scleradb]
 object ScalFunctionEvaluator {
     import com.scleradb.sql.exec.ScalCastEvaluator._
 

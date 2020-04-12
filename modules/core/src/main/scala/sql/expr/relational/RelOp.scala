@@ -72,7 +72,6 @@ sealed abstract class RelOp {
 /** Abstract base class for regular (standard) relational operators */
 sealed abstract class RegularRelOp extends RelOp
 
-private[scleradb]
 sealed abstract class ProjectBase extends RegularRelOp {
     override val arity: Int = 1
 
@@ -105,7 +104,6 @@ sealed abstract class ProjectBase extends RegularRelOp {
     }
 }
 
-private[scleradb]
 case class Project(
     override val targetExprs: List[ScalarTarget]
 ) extends ProjectBase {
@@ -136,7 +134,6 @@ case class Project(
         }
 }
 
-private[scleradb]
 case class Aggregate(
     override val targetExprs: List[ScalarTarget],
     groupExprs: List[ScalExpr] = Nil,
@@ -178,7 +175,6 @@ case class Aggregate(
         }
 }
 
-private[scleradb]
 object ProjectBase {
     def apply(
         targetExprs: List[TargetExpr],
@@ -344,7 +340,6 @@ case class Order(
         SortExpr.compatiblePartnCols(sortExprs, partnCols)
 }
 
-private[scleradb]
 case class LimitOffset(
     limitOpt: Option[Int],
     offset: Int,
@@ -385,7 +380,6 @@ case class LimitOffset(
         inputs.head.starColumns
 }
 
-private[scleradb]
 case class TableAlias(
     name: String,
     cols: List[ColRef] = Nil,
@@ -435,7 +429,6 @@ case class TableAlias(
         tableColRefs(inputs).map { col => AnnotColRef(Some(name), col.name) }
 }
 
-private[scleradb]
 sealed abstract class DistinctBase extends RegularRelOp {
     override val arity: Int = 1
 
@@ -449,7 +442,6 @@ sealed abstract class DistinctBase extends RegularRelOp {
         inputs.head.starColumns
 }
 
-private[scleradb]
 case class DistinctOn(
     exprs: List[ScalExpr],
     override val sortExprs: List[SortExpr]
@@ -475,7 +467,6 @@ case class DistinctOn(
     override def resultOrder(inputs: List[RelExpr]): List[SortExpr] = sortExprs
 }
 
-private[scleradb]
 case object Distinct extends DistinctBase {
     override def isStreamEvaluable(inputs: List[RelExpr]): Boolean = {
         val nCols: Int = inputs.head.tableColRefs.size
@@ -495,7 +486,6 @@ case object Distinct extends DistinctBase {
     override def resultOrder(inputs: List[RelExpr]): List[SortExpr] = Nil
 }
 
-private[scleradb]
 case class Select(predExpr: ScalExpr) extends RegularRelOp {
     override val arity: Int = 1
 
@@ -527,7 +517,6 @@ case class Select(predExpr: ScalExpr) extends RegularRelOp {
         inputs.head.starColumns
 }
 
-private[scleradb]
 case class Join(
     joinType: JoinType,
     joinPred: JoinPred
@@ -631,29 +620,19 @@ case class Join(
 }
 
 // join type
-private[scleradb]
 sealed abstract class JoinType
-private[scleradb]
 case object Inner extends JoinType
-private[scleradb]
 case object FullOuter extends JoinType
-private[scleradb]
 case object LeftOuter extends JoinType
-private[scleradb]
 case object RightOuter extends JoinType
 
 // join predicate
-private[scleradb]
 sealed abstract class JoinPred
-private[scleradb]
 case class JoinOn(predExpr: ScalExpr) extends JoinPred
-private[scleradb]
 case class JoinUsing(cols: List[ColRef]) extends JoinPred
-private[scleradb]
 case object JoinNatural extends JoinPred
 
 // compound operator 
-private[scleradb]
 case class Compound(compoundType: CompoundType) extends RegularRelOp {
     override val arity: Int = 2
 
@@ -690,13 +669,9 @@ case class Compound(compoundType: CompoundType) extends RegularRelOp {
 }
 
 // compound operator types
-private[scleradb]
 sealed abstract class CompoundType
-private[scleradb]
 case object Union extends CompoundType
-private[scleradb]
 case object Intersect extends CompoundType
-private[scleradb]
 case object Except extends CompoundType
 
 /** Extended (non-standard) relational operators */
@@ -706,7 +681,6 @@ abstract class ExtendedRelOp extends RelOp {
     override def locationIdOpt(inputs: List[RelExpr]): Option[LocationId] = None
 }
 
-private[scleradb]
 case object EvaluateOp extends ExtendedRelOp {
     override val arity: Int = 1
 
@@ -723,7 +697,6 @@ case object EvaluateOp extends ExtendedRelOp {
         inputs.head.starColumns
 }
 
-private[scleradb]
 case class Align(
     distanceExpr: ScalExpr,
     marginOpt: Option[Int]
@@ -747,7 +720,6 @@ case class Align(
 }
 
 // create disjoint intervals from possibly overlapping intervals
-private[scleradb]
 case class DisjointInterval(
     inpLhsColRef: ColRef,
     inpRhsColRef: ColRef,
@@ -791,7 +763,6 @@ case class DisjointInterval(
         tableColRefs(inputs).map { col => AnnotColRef(None, col.name) }
 }
 
-private[scleradb]
 case class UnPivot(
     outValCol: ColRef,
     outKeyCol: ColRef,
@@ -817,7 +788,6 @@ case class UnPivot(
         tableColRefs(inputs).map { col => AnnotColRef(None, col.name) }
 }
 
-private[scleradb]
 case class OrderedBy(sortExprs: List[SortExpr]) extends ExtendedRelOp {
     override val arity: Int = 1
 

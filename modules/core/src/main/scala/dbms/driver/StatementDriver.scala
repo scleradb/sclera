@@ -82,7 +82,6 @@ abstract class StatementDriver {
       * @param dataRows Iterator on rows to be inserted
       * @param tableRef Target table into which the rows are to be inserted
       */
-    private[scleradb]
     def executeInsertIn(
         dataColumns: List[Column],
         dataRows: Iterator[TableRow],
@@ -110,7 +109,6 @@ abstract class StatementDriver {
     ): Unit
 
     /** Print a message on the console */
-    private[scleradb]
     def printConsole(s: String): Unit =
         println("[%s] %s".format(location.id.repr, s))
 

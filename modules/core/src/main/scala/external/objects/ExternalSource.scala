@@ -34,7 +34,6 @@ abstract class ExternalSource extends java.io.Serializable {
 }
 
 /** Companion object - helps create external data source objects */
-private[scleradb]
 object ExternalSource {
     /** Get an external data source object from a data service
       * @param name External data service identifier

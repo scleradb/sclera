@@ -33,7 +33,6 @@ import com.scleradb.sql.result.TableRowGroupIterator
 import com.scleradb.analytics.transform.expr._
 import com.scleradb.analytics.transform.objects.Transformer
 
-private[scleradb]
 sealed abstract class TransformTableResult extends TableResult {
     val evaluator: ScalExprEvaluator
 
@@ -128,12 +127,10 @@ sealed abstract class TransformTableResult extends TableResult {
     override def close(): Unit = { }
 }
 
-private[scleradb]
 sealed abstract class RetainTransformTableResult extends TransformTableResult {
     override val columns: List[Column] = inputResult.columns ::: resultColumns
 }
 
-private[scleradb]
 case class JoinTransformTableResult(
     override val evaluator: ScalExprEvaluator,
     override val transformOp: JoinTransform,
@@ -177,7 +174,6 @@ case class JoinTransformTableResult(
     }
 }
 
-private[scleradb]
 case class UnionTransformTableResult(
     override val evaluator: ScalExprEvaluator,
     override val transformOp: Transform,
@@ -216,7 +212,6 @@ case class UnionTransformTableResult(
     }
 }
 
-private[scleradb]
 object TransformTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

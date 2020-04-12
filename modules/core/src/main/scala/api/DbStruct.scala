@@ -30,7 +30,6 @@ import com.scleradb.sql.expr._
 import com.scleradb.sql.types._
 
 // representation of a sql/scala datatype in the database
-private[scleradb]
 sealed abstract class DbStruct[T] {
     def fromDb(rs: TableRow): T // rs -> value
 
@@ -65,13 +64,11 @@ sealed abstract class DbStruct[T] {
 }
 
 // wrapper struct
-private[scleradb]
 abstract class Wrapper[A, B] {
     def wrap(baseVal: A): B
     def unwrap(wrappedVal: B): A
 }
 
-private[scleradb]
 case class DbWrapperStruct[A, B](
     baseDbs: DbStruct[A],
     wrapper: Wrapper[A, B]
@@ -93,7 +90,6 @@ case class DbWrapperStruct[A, B](
     def unwrapped: DbStruct[A] = baseDbs
 }
 
-private[scleradb]
 case class DbPairStruct[A, B](
     left: DbStruct[A], right: DbStruct[B]
 ) extends DbStruct[(A, B)] {
@@ -114,7 +110,6 @@ case class DbPairStruct[A, B](
         DbPairStruct(left.clone(rename), right.clone(rename))
 }
     
-private[scleradb]
 sealed abstract class DbColStruct[T] extends DbStruct[T] {
     def colName: String
     def sqlType: SqlTypeRoot[T]
@@ -137,7 +132,6 @@ sealed abstract class DbColStruct[T] extends DbStruct[T] {
         sqlType.dbStruct(rename(colName))
 }
 
-private[scleradb]
 sealed abstract class DbBaseTypeColStruct[T] extends DbColStruct[T] {
     def sqlType: SqlBaseType[T]
     override def column: Column = Column(colName, sqlType)
@@ -152,7 +146,6 @@ sealed abstract class DbBaseTypeColStruct[T] extends DbColStruct[T] {
 }
 
 // database representation of Base types
-private[scleradb]
 case class IntStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Int] {
@@ -166,7 +159,6 @@ case class IntStruct(
     override def scalar(value: Int): ScalValueBase = IntConst(value)
 }
 
-private[scleradb]
 case class ShortStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Short] {
@@ -178,7 +170,6 @@ case class ShortStruct(
     override def scalar(value: Short): ScalValueBase = ShortConst(value)
 }
 
-private[scleradb]
 case class LongStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Long] {
@@ -192,7 +183,6 @@ case class LongStruct(
     override def scalar(value: Long): ScalValueBase = LongConst(value)
 }
 
-private[scleradb]
 case class FloatStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Float] {
@@ -206,7 +196,6 @@ case class FloatStruct(
     override def scalar(value: Float): ScalValueBase = FloatConst(value)
 }
 
-private[scleradb]
 case class DoubleStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Double] {
@@ -220,7 +209,6 @@ case class DoubleStruct(
     override def scalar(value: Double): ScalValueBase = DoubleConst(value)
 }
 
-private[scleradb]
 case class BoolStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Boolean] {
@@ -234,7 +222,6 @@ case class BoolStruct(
     override def scalar(value: Boolean): ScalValueBase = BoolConst(value)
 }
 
-private[scleradb]
 case class StringStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[String] {
@@ -248,7 +235,6 @@ case class StringStruct(
     override def scalar(value: String): ScalValueBase = CharConst(value)
 }
 
-private[scleradb]
 case class DateStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Date] {
@@ -262,7 +248,6 @@ case class DateStruct(
     override def scalar(value: Date): ScalValueBase = DateConst(value)
 }
 
-private[scleradb]
 case class TimestampStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Timestamp] {
@@ -276,7 +261,6 @@ case class TimestampStruct(
     override def scalar(value: Timestamp): ScalValueBase = TimestampConst(value)
 }
 
-private[scleradb]
 case class TimeStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Time] {
@@ -290,7 +274,6 @@ case class TimeStruct(
     override def scalar(value: Time): ScalValueBase = TimeConst(value)
 }
 
-private[scleradb]
 case class BlobStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Blob] {
@@ -304,7 +287,6 @@ case class BlobStruct(
     override def scalar(value: Blob): ScalValueBase = BlobConst(value)
 }
 
-private[scleradb]
 case class ClobStruct(
     override val colName: String
 ) extends DbBaseTypeColStruct[Clob] {
@@ -319,7 +301,6 @@ case class ClobStruct(
 }
 
 // database representation of option
-private[scleradb]
 case class DbOptionStruct[A](
     baseDbs: DbBaseTypeColStruct[A]
 ) extends DbColStruct[Option[A]] {
@@ -340,7 +321,6 @@ case class DbOptionStruct[A](
     override def columnRef: ColRef = baseDbs.columnRef
 }
 
-private[scleradb]
 case object NullStruct extends DbBaseTypeColStruct[Null] {
     override def colName: String = null
     override def sqlType: SqlBaseType[Null] = SqlNullType

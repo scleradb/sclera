@@ -29,7 +29,6 @@ import com.scleradb.dbms.rdbms.driver.SqlDriver
 import com.scleradb.dbms.rdbms.h2.driver.H2SqlDriver
 import com.scleradb.dbms.rdbms.h2.mapper.H2SqlMapper
 
-private[scleradb]
 class H2(
     override val schema: Schema,
     override val id: LocationId,
@@ -59,7 +58,6 @@ class H2(
         new H2SqlDriver(this, sqlMapper, url, config)
 }
 
-private[scleradb]
 object H2 {
     val id: String = "H2"
 }

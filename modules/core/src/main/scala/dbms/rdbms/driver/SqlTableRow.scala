@@ -23,7 +23,6 @@ import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.BaseTableRow
 import com.scleradb.sql.exec.ScalCastEvaluator
 
-private[scleradb]
 class SqlTableRow(
     valMap: Map[String, Option[java.lang.Object]],
     val cols: List[Column]
@@ -80,7 +79,6 @@ class SqlTableRow(
         }
 }
 
-private[scleradb]
 object SqlTableRow {
     def apply(
         valMap: Map[String, Option[java.lang.Object]],

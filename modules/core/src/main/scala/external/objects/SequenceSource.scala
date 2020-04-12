@@ -23,7 +23,6 @@ import com.scleradb.sql.result.ScalTableResult
 import com.scleradb.sql.expr.{ScalColValue, IntConst, ColRef, SortExpr, SortAsc}
 
 /** Generates a sequence of numbers */
-private[scleradb]
 class SequenceSource(n: Int) extends ExternalSource {
     /** Name of the data source */
     override val name: String = "SEQUENCE"
@@ -46,7 +45,6 @@ class SequenceSource(n: Int) extends ExternalSource {
     override def toString: String = name + "[" + n + "] AS (" + colName + ")"
 }
 
-private[scleradb]
 object SequenceSource {
     def apply(n: Int): SequenceSource = new SequenceSource(n)
 }

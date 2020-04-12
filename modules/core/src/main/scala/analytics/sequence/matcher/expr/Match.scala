@@ -27,7 +27,6 @@ import com.scleradb.util.automata.nfa.AnchoredNfa
 
 import com.scleradb.analytics.sequence.labeler.{RowLabeler, ConstRowLabeler}
 
-private[scleradb]
 case class Match(
     regexStr: String,
     labelerOpt: Option[RowLabeler],

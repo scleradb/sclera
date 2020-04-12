@@ -32,7 +32,6 @@ import com.scleradb.config.ScleraConfig
 
 /** Machine learning operator service */
 abstract class MLService extends ScleraService {
-    private[scleradb]
     def deSerialize(in: ObjectInputStream, typeStr: String): MLObject =
         if( typeStr == Classifier.typeStr )
             deSerializeClassifier(in)
@@ -84,7 +83,6 @@ abstract class MLService extends ScleraService {
     ): Clusterer
 }
 
-private[scleradb]
 object MLService extends ScleraServiceLoader(classOf[MLService]) {
     def apply(idOpt: Option[String] = None): MLService =
         apply(idOpt getOrElse ScleraConfig.defaultMLService)

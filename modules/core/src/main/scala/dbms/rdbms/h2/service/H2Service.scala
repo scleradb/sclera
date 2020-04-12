@@ -23,7 +23,6 @@ import com.scleradb.dbms.location.{LocationId, LocationPermit}
 import com.scleradb.dbms.service.DBService
 import com.scleradb.dbms.rdbms.h2.location.H2
 
-private[scleradb]
 class H2Service extends DBService {
     override val id: String = H2.id
 

@@ -27,7 +27,6 @@ import com.scleradb.analytics.transform.expr.Transform
 import com.scleradb.analytics.transform.datatypes.TransformTableResult
 
 // generic transform
-private[scleradb]
 case class TransformEvalOp(
     evaluator: ScalExprEvaluator,
     transform: Transform

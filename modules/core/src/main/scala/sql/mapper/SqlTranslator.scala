@@ -25,7 +25,6 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.mapper.target._
 
 // translate normalized relExpr to SQL intermediate structures
-private[scleradb]
 object SqlTranslator {
     def translateQuery(
         query: SqlRelQueryStatement

@@ -27,14 +27,12 @@ abstract class DbObject extends Serializable {
 }
 
 // Database object global id
-private[scleradb]
 abstract class SchemaObjectId extends Serializable {
     val name: String
     def repr: String
 }
 
 // global class wrapping a local object
-private[scleradb]
 abstract class SchemaObject extends Serializable {
     val obj: DbObject
     val id: SchemaObjectId
@@ -51,7 +49,6 @@ abstract class SchemaObject extends Serializable {
     override def toString: String = "[Object (id = " + id.repr + ")]"
 }
 
-private[scleradb]
 object SchemaObject {
     def duration(schema: Schema, id: SchemaObjectId): DbObjectDuration =
         duration(schema, id.repr)

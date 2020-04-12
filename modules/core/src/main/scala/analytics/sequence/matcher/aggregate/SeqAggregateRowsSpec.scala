@@ -23,7 +23,6 @@ import com.scleradb.util.automata.datatypes.Label
 import com.scleradb.sql.result.TableResult
 import com.scleradb.sql.expr.{AliasedExpr, ColRef}
 
-private[scleradb]
 sealed abstract class SeqAggregateRowsSpec extends java.io.Serializable {
     def isArgAggregate: Boolean
 
@@ -38,7 +37,6 @@ sealed abstract class SeqAggregateRowsSpec extends java.io.Serializable {
     def aggregate(input: TableResult): SeqAggregateRows
 }
 
-private[scleradb]
 case class SeqArgOptsSpec(
     override val aggregateColSpecs: List[SeqAggregateColSpec]
 ) extends SeqAggregateRowsSpec {
@@ -60,7 +58,6 @@ case class SeqArgOptsSpec(
     }
 }
 
-private[scleradb]
 case class SeqAggregateColSetSpec(
     override val aggregateColSpecs: List[SeqAggregateColSpec],
     retainedColRefs: List[ColRef]

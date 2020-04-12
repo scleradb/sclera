@@ -22,7 +22,6 @@ import com.scleradb.sql.plan.{RelEvalPlan, RelEvalPlanResult}
 
 import com.scleradb.external.expr.ExternalSourceExpr
 
-private[scleradb]
 case class ExternalSourceEvalPlan(
     override val relExpr: ExternalSourceExpr
 ) extends RelEvalPlan {

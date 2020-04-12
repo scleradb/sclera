@@ -36,7 +36,6 @@ abstract class MLObject extends DbObject {
     def serviceId: String
 
     /** Type of object */
-    private[scleradb]
     def typeStr: String
 
     /** Name of this object */
@@ -46,7 +45,6 @@ abstract class MLObject extends DbObject {
     def description: String
 
     /** Associated Schema Object */
-    private[scleradb]
     def schemaObject: SchemaMLObject
 
     /** Serialize this object */
@@ -57,12 +55,10 @@ abstract class MLObject extends DbObject {
 }
 
 /** Identifier for ML Objects */
-private[scleradb]
 case class MLObjectId(override val name: String) extends SchemaObjectId {
     override def repr: String = name.toUpperCase
 }
 
-private[scleradb]
 abstract class SchemaMLObject extends SchemaObject {
     override val obj: MLObject
     override val id: MLObjectId = MLObjectId(obj.name)
@@ -76,7 +72,6 @@ abstract class SchemaMLObject extends SchemaObject {
     override def locationIdOpt: Option[LocationId] = None
 }
 
-private[scleradb]
 object SchemaMLObject {
     def serialize(sv: SchemaMLObject, out: ObjectOutputStream): Unit =
         sv.obj.serialize(out)

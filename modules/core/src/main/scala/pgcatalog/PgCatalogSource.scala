@@ -38,7 +38,6 @@ import com.scleradb.sql.result.{TableResult, TableRow, ScalTableRow}
 import com.scleradb.external.objects.ExternalSource
 
 /** PG Catalog data source - base class */
-private[scleradb]
 sealed abstract class PgCatalogSource extends ExternalSource {
     /** Name of the data source */
     override val name: String = PgCatalogSource.name
@@ -60,7 +59,6 @@ sealed abstract class PgCatalogSource extends ExternalSource {
 }
 
 /** Table PG_TYPE */
-private[scleradb]
 object PgType extends PgCatalogSource {
     override val tableName: String = "PG_TYPE"
 
@@ -180,7 +178,6 @@ object PgType extends PgCatalogSource {
 }
 
 /** Table PG_NAMESPACE */
-private[scleradb]
 class PgNameSpace(schema: Schema) extends PgCatalogSource {
     override val tableName: String = "PG_NAMESPACE"
 
@@ -212,7 +209,6 @@ class PgNameSpace(schema: Schema) extends PgCatalogSource {
 }
 
 /** Table PG_CLASS */
-private[scleradb]
 class PgClass(schema: Schema) extends PgCatalogSource {
     override val tableName: String = "PG_CLASS"
 
@@ -327,7 +323,6 @@ class PgClass(schema: Schema) extends PgCatalogSource {
 }
 
 /** Table PG_ATTRIBUTE */
-private[scleradb]
 class PgAttribute(schema: Schema) extends PgCatalogSource {
     override val tableName: String = "PG_CLASS"
 
@@ -410,7 +405,6 @@ class PgAttribute(schema: Schema) extends PgCatalogSource {
 }
 
 /** Table PG_ATTRDEF */
-private[scleradb]
 object PgAttrDef extends PgCatalogSource {
     override val tableName: String = "PG_ATTRDEF"
 
@@ -427,7 +421,6 @@ object PgAttrDef extends PgCatalogSource {
     override val rows: List[ScalTableRow] = Nil
 }
 
-private[scleradb]
 object PgCatalogSource {
     /** The data source name */
     val name: String = "PG_CATALOG"

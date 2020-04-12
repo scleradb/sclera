@@ -24,7 +24,6 @@ import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.ScalTableRow
 import com.scleradb.sql.exec.ScalExprEvaluator
 
-private[scleradb]
 sealed abstract class SeqAggregateRows {
     def result(curRow: ScalTableRow): List[List[ScalColValue]]
     def update(
@@ -35,7 +34,6 @@ sealed abstract class SeqAggregateRows {
     val columns: List[Column]
 }
 
-private[scleradb]
 case class SeqArgOpts(
     aggregates: List[SeqArgAggregate]
 ) extends SeqAggregateRows {
@@ -58,7 +56,6 @@ case class SeqArgOpts(
     override val columns: List[Column] = aggregates.head.columns
 }
 
-private[scleradb]
 case class SeqAggregateColSet(
     aggregateCols: List[SeqAggregate],
     retainedCols: List[Column]

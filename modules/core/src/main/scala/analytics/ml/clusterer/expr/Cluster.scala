@@ -25,7 +25,6 @@ import com.scleradb.analytics.ml.objects.MLObjectId
 import com.scleradb.analytics.ml.clusterer.objects.{Clusterer, SchemaClusterer}
 import com.scleradb.analytics.ml.expr.MLRelOp
 
-private[scleradb]
 case class Cluster(
     clustererId: MLObjectId,
     clusterIdColRef: ColRef

@@ -30,7 +30,6 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.mapper._
 import com.scleradb.sql.mapper.target._
 
-private[scleradb]
 class H2SqlMapper(loc: Location) extends SqlMapper {
     override def queryString(
         query: SqlRelQueryStatement

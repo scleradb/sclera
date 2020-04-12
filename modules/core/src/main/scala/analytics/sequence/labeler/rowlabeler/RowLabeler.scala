@@ -23,7 +23,6 @@ import com.scleradb.sql.expr.{ColRef, RelExpr}
 import com.scleradb.sql.result.ScalTableRow
 
 // abstract row labeler
-private[scleradb]
 abstract class RowLabeler {
     // columns required by this labeler
     def requiredCols: List[ColRef]

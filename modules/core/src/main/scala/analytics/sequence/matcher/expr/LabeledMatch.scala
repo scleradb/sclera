@@ -25,7 +25,6 @@ import com.scleradb.sql.expr.{ColRef, AnnotColRef, SortExpr}
 import com.scleradb.analytics.sequence.labeler.RowLabeler
 import com.scleradb.analytics.sequence.matcher.RowSequenceMatcher
 
-private[scleradb]
 case class LabeledMatch(
     labeler: RowLabeler,
     matcher: RowSequenceMatcher

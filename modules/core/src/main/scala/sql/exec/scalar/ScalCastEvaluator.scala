@@ -25,7 +25,6 @@ import scala.math.ScalaNumericAnyConversions
 import com.scleradb.sql.types._
 import com.scleradb.sql.expr._
 
-private[scleradb]
 object ScalCastEvaluator {
     def castScalColValue(
         cval: ScalColValue,

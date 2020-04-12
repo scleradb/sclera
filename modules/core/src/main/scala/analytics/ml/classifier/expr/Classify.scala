@@ -25,7 +25,6 @@ import com.scleradb.analytics.ml.objects.MLObjectId
 import com.scleradb.analytics.ml.classifier.objects._
 import com.scleradb.analytics.ml.expr.MLRelOp
 
-private[scleradb]
 case class Classify(
     classifierId: MLObjectId,
     labelColRef: ColRef

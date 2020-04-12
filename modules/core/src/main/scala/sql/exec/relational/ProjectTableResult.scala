@@ -29,7 +29,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow}
   * @param inputResult Input result
   * @param resultOrderOpt Ordering of the rows in the result
   */
-private[scleradb]
 class ProjectTableResult(
     evaluator: ScalExprEvaluator,
     targetExprs: List[ScalarTarget],
@@ -58,7 +57,6 @@ class ProjectTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object ProjectTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

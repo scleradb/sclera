@@ -26,7 +26,6 @@ import com.scleradb.sql.plan.{RelEvalOp, RelEvalPlanResult}
 import com.scleradb.analytics.ml.imputer.expr.Impute
 import com.scleradb.analytics.ml.imputer.datatypes.ImputeResult
 
-private[scleradb]
 case class ImputeEvalOp(
     schema: Schema,
     imputeOp: Impute

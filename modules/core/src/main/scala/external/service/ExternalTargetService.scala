@@ -36,7 +36,6 @@ abstract class ExternalTargetService extends ScleraService {
 }
 
 /** Companion object - helps create an external data target service */
-private[scleradb]
 object ExternalTargetService extends ScleraServiceLoader(
     classOf[ExternalTargetService]
 )

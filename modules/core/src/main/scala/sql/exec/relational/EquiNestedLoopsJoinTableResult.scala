@@ -38,7 +38,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow, ConcatTableRow}
   * @param rhsColumns Right input columns
   * @param rhsCol Join column of the right input
   */
-private[scleradb]
 class EquiNestedLoopsJoinTableResult(
     processor: Processor,
     override val joinType: JoinType,
@@ -107,7 +106,6 @@ class EquiNestedLoopsJoinTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object EquiNestedLoopsJoinTableResult {
     def apply(
         processor: Processor,

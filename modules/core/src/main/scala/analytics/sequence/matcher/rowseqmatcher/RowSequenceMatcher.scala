@@ -28,7 +28,6 @@ import com.scleradb.sql.exec.ScalExprEvaluator
 import com.scleradb.analytics.sequence.matcher.aggregate._
 import com.scleradb.analytics.sequence.matcher.service.SequenceMatcherService
 
-private[scleradb]
 abstract class RowSequenceMatcher extends java.io.Serializable {
     val aggregateRowsSpec: SeqAggregateRowsSpec
     val partitionCols: List[ColRef]
@@ -80,7 +79,6 @@ abstract class RowSequenceMatcher extends java.io.Serializable {
     }
 }
 
-private[scleradb]
 object RowSequenceMatcher {
     def apply(
         nfa: AnchoredNfa,

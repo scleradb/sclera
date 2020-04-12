@@ -28,7 +28,6 @@ import com.scleradb.sql.result.{TableResult, TableRow, TableRowGroupIterator}
   * @param offset Offset within each group
   * @param inputResult Streaming input on which the operator is evaluated
   */
-private[scleradb]
 class DistinctTableResult(
     evaluator: ScalExprEvaluator,
     exprs: List[ScalExpr],
@@ -56,7 +55,6 @@ class DistinctTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object DistinctTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

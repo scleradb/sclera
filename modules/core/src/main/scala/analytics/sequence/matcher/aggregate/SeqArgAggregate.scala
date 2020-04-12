@@ -24,7 +24,6 @@ import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.ScalTableRow
 import com.scleradb.sql.exec.ScalExprEvaluator
 
-private[scleradb]
 sealed abstract class SeqArgAggregate extends java.io.Serializable {
     val columns: List[Column]
     def result: List[List[ScalColValue]]
@@ -35,7 +34,6 @@ sealed abstract class SeqArgAggregate extends java.io.Serializable {
     ): SeqArgAggregate
 }
 
-private[scleradb]
 case class SeqLabeledArgAggregate(
     aggregate: SeqUnLabeledArgAggregate,
     labels: List[Label]
@@ -56,7 +54,6 @@ case class SeqLabeledArgAggregate(
         else this
 }
 
-private[scleradb]
 case class SeqUnLabeledArgAggregate(
     param: ScalExpr,
     override val columns: List[Column],
@@ -96,7 +93,6 @@ case class SeqUnLabeledArgAggregate(
     }
 }
 
-private[scleradb]
 object SeqArgAggregate {
     def apply(
         columns: List[Column],

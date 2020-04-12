@@ -31,7 +31,6 @@ abstract class ExternalFunctionService extends ScleraService {
 }
 
 /** Companion object - helps create an external function service */
-private[scleradb]
 object ExternalFunctionService extends ScleraServiceLoader(
     classOf[ExternalFunctionService]
 )

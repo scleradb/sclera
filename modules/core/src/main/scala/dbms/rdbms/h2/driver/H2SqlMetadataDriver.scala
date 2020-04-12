@@ -22,7 +22,6 @@ import java.sql.{DatabaseMetaData, ResultSet}
 import com.scleradb.sql.result.TableResult
 import com.scleradb.dbms.rdbms.driver.{SqlDriver, SqlMetadataDriver}
 
-private[scleradb]
 class H2SqlMetadataDriver(
     driver: SqlDriver,
     metaData: DatabaseMetaData

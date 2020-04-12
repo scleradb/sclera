@@ -143,7 +143,6 @@ object Table {
     }
 }
 
-private[scleradb]
 case class TableId(
     locationId: LocationId,
     override val name: String
@@ -151,7 +150,6 @@ case class TableId(
     override def repr: String = locationId.repr + "." + name
 }
 
-private[scleradb]
 class SchemaTable(
     override val obj: Table,
     val locationId: LocationId
@@ -163,7 +161,6 @@ class SchemaTable(
     override def locationIdOpt: Option[LocationId] = Some(locationId)
 }
 
-private[scleradb]
 object SchemaTable {
     def apply(table: Table, locationId: LocationId): SchemaTable =
         new SchemaTable(table, locationId)

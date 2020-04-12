@@ -70,7 +70,6 @@ sealed abstract class ScalExpr extends Serializable {
     def repr: String = SqlMapper.exprString(this)
 }
 
-private[scleradb]
 object ScalExpr {
     def replace(
         expr: ScalExpr,
@@ -101,7 +100,6 @@ object ScalExpr {
 }
 
 // scalar expression tree
-private[scleradb]
 case class ScalOpExpr(op: ScalOp, inputs: List[ScalExpr]) extends ScalExpr {
     if( op.isAggregate ) inputs.foreach { input =>
         if( input.isAggregate ) throw new IllegalArgumentException(
@@ -147,7 +145,6 @@ case class ScalOpExpr(op: ScalOp, inputs: List[ScalExpr]) extends ScalExpr {
 }
 
 // case expression
-private[scleradb]
 case class CaseExpr(
     argExpr: ScalExpr,
     whenThen: List[(ScalExpr, ScalExpr)],
@@ -246,7 +243,6 @@ case class AnnotColRef(
   * @param indexOpt Index associated with the column
   * @param name     Name of the column
   */
-private[scleradb]
 case class LabeledColRef(
     override val labels: List[String],
     indexOpt: Option[Int],
@@ -496,13 +492,11 @@ case class Row(scalars: List[ScalColValue]) extends ScalValue {
 }
 
 // pattern string, with associated escape sequence
-private[scleradb]
 case class Pattern(pattern: String, esc: String) extends ScalValue {
     override def defaultAlias: String = "PATTERN"
 }
 
 // subqueries
-private[scleradb]
 sealed abstract class ScalSubQueryBase extends ScalBaseExpr {
     override def isColRef: Boolean = false
     override def isConstant: Boolean = false // accomodating for correlations
@@ -512,14 +506,12 @@ sealed abstract class ScalSubQueryBase extends ScalBaseExpr {
 
 // cast to scalar
 // TODO: support correlated subQueries
-private[scleradb]
 case class ScalSubQuery(relExpr: RelExpr) extends ScalSubQueryBase {
     override def columns: Set[ColRefBase] = Set()
     override def defaultAlias: String = "SUBQUERY"
 }
 
 // TODO: support correlated subQueries
-private[scleradb]
 case class Exists(relExpr: RelExpr) extends ScalSubQueryBase {
     override def columns: Set[ColRefBase] = Set()
     override def defaultAlias: String = "EXISTS"
@@ -527,7 +519,6 @@ case class Exists(relExpr: RelExpr) extends ScalSubQueryBase {
 
 // relational side of a scalar/relational comparison
 // TODO: support correlated subQueries
-private[scleradb]
 case class ScalCmpRelExpr(
     qual: CmpQual,
     subQueryOrList: RelSubQueryBase
@@ -536,11 +527,8 @@ case class ScalCmpRelExpr(
 }
 
 // subquery comparison qualifier
-private[scleradb]
 sealed abstract class CmpQual
-private[scleradb]
 case object CmpAll extends CmpQual
-private[scleradb]
 case object CmpAny extends CmpQual
 
 /** Sort direction */
@@ -587,7 +575,6 @@ case class SortExpr(expr: ScalExpr, sortDir: SortDir, nullsOrder: NullsOrder) {
 }
 
 // utility functions
-private[scleradb]
 object SortExpr {
     def apply(expr: ScalExpr): SortExpr = apply(expr, SortAsc)
 
@@ -619,14 +606,12 @@ object SortExpr {
 }
 
 // targeted expression for project
-private[scleradb]
 sealed abstract class TargetExpr {
     def isAggregate: Boolean
     def isNestedAggregate: Boolean
     def repr: String = SqlMapper.targetExprString(this)
 }
 
-private[scleradb]
 case class StarTargetExpr(
     tableNameOpt: Option[(String, Option[Int])],
     exceptColRefs: List[ColRef] = Nil
@@ -635,7 +620,6 @@ case class StarTargetExpr(
     override def isNestedAggregate: Boolean = false
 }
 
-private[scleradb]
 sealed abstract class ScalarTarget extends TargetExpr {
     val expr: ScalExpr
     val alias: ColRef
@@ -649,7 +633,6 @@ sealed abstract class ScalarTarget extends TargetExpr {
     override def isNestedAggregate: Boolean = expr.isNestedAggregate
 }
 
-private[scleradb]
 object ScalarTarget {
     def apply(expr: ScalExpr, alias: ColRef): ScalarTarget = expr match {
         case (value: ScalColValue) => ValueCol(value, alias)
@@ -658,25 +641,21 @@ object ScalarTarget {
     }
 }
 
-private[scleradb]
 case class AliasedExpr(
     override val expr: ScalExpr,
     override val alias: ColRef
 ) extends ScalarTarget
 
-private[scleradb]
 sealed abstract class RenameTarget extends ScalarTarget {
     override val expr: ScalExpr
     override val alias: ColRef
 }
 
-private[scleradb]
 case class RenameCol(
     override val expr: ColRef,
     override val alias: ColRef
 ) extends RenameTarget
 
-private[scleradb]
 case class ValueCol(
     override val expr: ScalColValue,
     override val alias: ColRef

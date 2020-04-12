@@ -30,7 +30,6 @@ import com.scleradb.analytics.ml.classifier.datatypes.ClassifyResult
 
 /** Abstract base class for classifier libraries */
 abstract class Classifier extends MLObject {
-    private[scleradb]
     override def typeStr: String = Classifier.typeStr
 
     /** Classifier name */
@@ -60,11 +59,9 @@ abstract class Classifier extends MLObject {
     /** Classifier description */
     override def description: String
 
-    private[scleradb]
     override def schemaObject: SchemaClassifier = SchemaClassifier(this)
 }
 
-private[scleradb]
 object Classifier {
     val typeStr: String = "CLASSIFIER"
 
@@ -80,10 +77,8 @@ object Classifier {
     )
 }
 
-private[scleradb]
 class SchemaClassifier(override val obj: Classifier) extends SchemaMLObject
 
-private[scleradb]
 object SchemaClassifier {
     def apply(classifier: Classifier): SchemaClassifier =
         new SchemaClassifier(classifier)

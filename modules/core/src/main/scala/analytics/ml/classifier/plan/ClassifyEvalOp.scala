@@ -25,7 +25,6 @@ import com.scleradb.sql.plan.{RelEvalOp, RelEvalPlanResult}
 
 import com.scleradb.analytics.ml.classifier.expr.Classify
 
-private[scleradb]
 case class ClassifyEvalOp(
     schema: Schema,
     classifyOp: Classify

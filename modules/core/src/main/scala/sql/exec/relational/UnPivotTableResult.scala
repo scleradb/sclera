@@ -27,7 +27,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow}
   * @param outKeyColRef Column containing the mapped input column name
   * @param inColRefVals Input column name to value mapping
   */
-private[scleradb]
 class UnPivotTableResult(
     outValColRef: ColRef,
     outKeyColRef: ColRef,
@@ -76,7 +75,6 @@ class UnPivotTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object UnPivotTableResult {
     def apply(
         outValCol: ColRef,

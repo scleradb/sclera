@@ -18,11 +18,8 @@
 package com.scleradb.sql.expr
 
 // subqueries (only appear within scalar expressions)
-private[scleradb]
 sealed abstract class RelSubQueryBase
 
 // list of scalar constants interpreted as list of rows
-private[scleradb]
 case class ScalarList(scalars: List[ScalColValue]) extends RelSubQueryBase
-private[scleradb]
 case class RelSubQuery(query: RelExpr) extends RelSubQueryBase

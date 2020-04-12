@@ -26,7 +26,6 @@ import com.scleradb.sql.expr.ColRef
 import com.scleradb.analytics.sequence.matcher.aggregate.SeqAggregateRowsSpec
 import com.scleradb.analytics.sequence.matcher.RowSequenceMatcher
 
-private[scleradb]
 abstract class SequenceMatcherService extends ScleraService {
     def createMatcher(
         anchoredNfa: AnchoredNfa,
@@ -35,7 +34,6 @@ abstract class SequenceMatcherService extends ScleraService {
     ): RowSequenceMatcher
 }
 
-private[scleradb]
 object SequenceMatcherService extends ScleraServiceLoader(
     classOf[SequenceMatcherService]
 ) {

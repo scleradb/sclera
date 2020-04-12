@@ -33,7 +33,6 @@ import com.scleradb.analytics.sequence.labeler.{RowLabeler, ColumnRowLabeler}
 import com.scleradb.analytics.ml.objects.MLObjectId
 
 // SQL CUD parser
-private[scleradb]
 trait SqlCudParser extends SqlQueryParser {
     override def sqlStatement: Parser[SqlStatement] =
         super.sqlStatement | sqlUpdateStatement

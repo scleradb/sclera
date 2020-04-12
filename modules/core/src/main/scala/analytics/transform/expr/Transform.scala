@@ -22,7 +22,6 @@ import com.scleradb.sql.expr.{ScalExpr, ColRef, AnnotColRef, SortExpr}
 
 import com.scleradb.analytics.transform.objects.Transformer
 
-private[scleradb]
 sealed abstract class Transform extends ExtendedRelOp {
     val transformType: Transform.TransformType
 
@@ -42,7 +41,6 @@ sealed abstract class Transform extends ExtendedRelOp {
     override def tableNames(inputs: List[RelExpr]): List[String] = Nil
 }
 
-private[scleradb]
 object Transform {
     sealed abstract class TransformType
     case object Join extends TransformType
@@ -99,7 +97,6 @@ object Transform {
     }
 }
 
-private[scleradb]
 sealed abstract class RetainTransform extends Transform {
     override def tableColRefs(inputs: List[RelExpr]): List[ColRef] =
         inputs.head.tableColRefs ::: out.map { case (_, col) => col }
@@ -117,7 +114,6 @@ sealed abstract class RetainTransform extends Transform {
   * @param order Needed order for the rows within each partn before processing
   * @param out Transformation output parameters
   */
-private[scleradb]
 case class JoinTransform(
     override val transformer: Transformer,
     override val in: List[(String, ScalExpr)],
@@ -139,7 +135,6 @@ case class JoinTransform(
   * @param order Needed order for the rows within each partn before processing
   * @param out Transformation output parameters
   */
-private[scleradb]
 case class UnionTransform(
     override val transformer: Transformer,
     override val in: List[(String, ScalExpr)],

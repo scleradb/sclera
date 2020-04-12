@@ -27,7 +27,6 @@ import com.scleradb.sql.result.ScalTableRow
 import com.scleradb.analytics.sequence.labeler.service.PredLabelerService
 
 // labels rows based on predicates
-private[scleradb]
 abstract class PredRowLabeler extends RowLabeler {
     val predLabels: List[(ScalExpr, Label)]
 
@@ -48,7 +47,6 @@ abstract class PredRowLabeler extends RowLabeler {
     }
 }
 
-private[scleradb]
 object PredRowLabeler {
     def apply(
         labelerIdOpt: Option[String],

@@ -31,7 +31,6 @@ abstract class ExternalSourceService extends ScleraService {
 }
 
 /** Companion object - helps create an external data source service */
-private[scleradb]
 object ExternalSourceService extends ScleraServiceLoader(
     classOf[ExternalSourceService]
 )

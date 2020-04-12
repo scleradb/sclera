@@ -28,7 +28,6 @@ import com.scleradb.sql.result.ScalTableRow
 import com.scleradb.sql.exec.ScalTypeEvaluator
 import com.scleradb.sql.exec.{ScalCastEvaluator, ScalExprEvaluator}
 
-private[scleradb]
 sealed abstract class SeqAggregate {
     def valueExprs: List[ScalColValue]
     def update(
@@ -42,7 +41,6 @@ sealed abstract class SeqAggregate {
         "[Value = " + valueExprs.map(v => v.repr).mkString(", ") + "]"
 }
 
-private[scleradb]
 case class SeqLabeledAggregate(
     aggregate: SeqUnLabeledAggregate,
     labels: List[Label]
@@ -61,7 +59,6 @@ case class SeqLabeledAggregate(
     override val columns: List[Column] = aggregate.columns
 }
 
-private[scleradb]
 sealed abstract class SeqUnLabeledAggregate extends SeqAggregate {
     override def update(
         evaluator: ScalExprEvaluator,
@@ -70,7 +67,6 @@ sealed abstract class SeqUnLabeledAggregate extends SeqAggregate {
     ): SeqUnLabeledAggregate
 }
 
-private[scleradb]
 case class SeqStringAggregate(
     pathCol: ColRef,
     paramOpt: Option[ScalExpr],
@@ -96,7 +92,6 @@ case class SeqStringAggregate(
     override val columns: List[Column] = List(Column(pathCol.name, SqlText))
 }
 
-private[scleradb]
 case class SeqIndexFirstAggregate(
     index: Int,
     resultColRef: ColRef,
@@ -137,7 +132,6 @@ case class SeqIndexFirstAggregate(
         List(Column(resultColRef.name, paramType.option))
 }
 
-private[scleradb]
 case class SeqIndexLastAggregate(
     index: Int,
     resultColRef: ColRef,
@@ -170,7 +164,6 @@ case class SeqIndexLastAggregate(
         List(Column(resultColRef.name, paramType.option))
 }
 
-private[scleradb]
 case class SeqCountAggregate(
     countCol: ColRef,
     paramOpt: Option[ScalExpr],
@@ -195,7 +188,6 @@ case class SeqCountAggregate(
     override val columns: List[Column] = List(Column(countCol.name, SqlBigInt))
 }
 
-private[scleradb]
 case class SeqRankAggregate(
     rankCol: ColRef,
     params: List[ScalExpr],
@@ -226,7 +218,6 @@ case class SeqRankAggregate(
     override val columns: List[Column] = List(Column(rankCol.name, SqlBigInt))
 }
 
-private[scleradb]
 case class SeqExistsAggregate(
     existsCol: ColRef,
     exists: Boolean = false
@@ -243,7 +234,6 @@ case class SeqExistsAggregate(
     override val columns: List[Column] = List(Column(existsCol.name, SqlBool))
 }
 
-private[scleradb]
 case class SeqBoolAndAggregate(
     boolAndCol: ColRef,
     param: ScalExpr,
@@ -276,7 +266,6 @@ case class SeqBoolAndAggregate(
         List(Column(boolAndCol.name, SqlBool.option))
 }
 
-private[scleradb]
 case class SeqBoolOrAggregate(
     boolOrCol: ColRef,
     param: ScalExpr,
@@ -309,7 +298,6 @@ case class SeqBoolOrAggregate(
         List(Column(boolOrCol.name, SqlBool.option))
 }
 
-private[scleradb]
 case class SeqOptAggregate(
     resCol: ColRef,
     param: ScalExpr,
@@ -349,7 +337,6 @@ case class SeqOptAggregate(
         List(Column(resCol.name, sqlType.option))
 }
 
-private[scleradb]
 case class SeqIntSumAggregate(
     sumCol: ColRef,
     param: ScalExpr,
@@ -384,7 +371,6 @@ case class SeqIntSumAggregate(
         List(Column(sumCol.name, SqlBigInt.option))
 }
 
-private[scleradb]
 case class SeqFloatSumAggregate(
     sumCol: ColRef,
     param: ScalExpr,
@@ -419,7 +405,6 @@ case class SeqFloatSumAggregate(
         List(Column(sumCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 sealed abstract class SeqPairUnLabeledAggregate extends SeqUnLabeledAggregate {
     val paramY: ScalExpr
     val paramX: ScalExpr
@@ -444,7 +429,6 @@ sealed abstract class SeqPairUnLabeledAggregate extends SeqUnLabeledAggregate {
     def update(y: Double, x: Double): SeqPairUnLabeledAggregate
 }
 
-private[scleradb]
 case class SeqCorrAggregate(
     corrCol: ColRef,
     override val paramY: ScalExpr,
@@ -487,7 +471,6 @@ case class SeqCorrAggregate(
         List(Column(corrCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqCovarAggregate(
     covarCol: ColRef,
     override val paramY: ScalExpr,
@@ -525,7 +508,6 @@ case class SeqCovarAggregate(
         List(Column(covarCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrAvgXAggregate(
     regrAvgXCol: ColRef,
     override val paramY: ScalExpr,
@@ -547,7 +529,6 @@ case class SeqRegrAvgXAggregate(
         List(Column(regrAvgXCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrAvgYAggregate(
     regrAvgYCol: ColRef,
     override val paramY: ScalExpr,
@@ -569,7 +550,6 @@ case class SeqRegrAvgYAggregate(
         List(Column(regrAvgYCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrCountAggregate(
     regrCountCol: ColRef,
     override val paramY: ScalExpr,
@@ -588,7 +568,6 @@ case class SeqRegrCountAggregate(
         List(Column(regrCountCol.name, SqlBigInt))
 }
 
-private[scleradb]
 case class SeqRegrSlopeAggregate(
     regrSlopeCol: ColRef,
     override val paramY: ScalExpr,
@@ -628,7 +607,6 @@ case class SeqRegrSlopeAggregate(
         List(Column(regrSlopeCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrInterceptAggregate(
     regrInterceptCol: ColRef,
     override val paramY: ScalExpr,
@@ -668,7 +646,6 @@ case class SeqRegrInterceptAggregate(
         List(Column(regrInterceptCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrR2Aggregate(
     regrR2Col: ColRef,
     override val paramY: ScalExpr,
@@ -714,7 +691,6 @@ case class SeqRegrR2Aggregate(
         List(Column(regrR2Col.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrSxxAggregate(
     regrSxxCol: ColRef,
     override val paramY: ScalExpr,
@@ -743,7 +719,6 @@ case class SeqRegrSxxAggregate(
         List(Column(regrSxxCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrSyyAggregate(
     regrSyyCol: ColRef,
     override val paramY: ScalExpr,
@@ -772,7 +747,6 @@ case class SeqRegrSyyAggregate(
         List(Column(regrSyyCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqRegrSxyAggregate(
     regrSxyCol: ColRef,
     override val paramY: ScalExpr,
@@ -803,7 +777,6 @@ case class SeqRegrSxyAggregate(
         List(Column(regrSxyCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 sealed abstract class SeqSingleUnLabeledAggregate
 extends SeqUnLabeledAggregate {
     val param: ScalExpr
@@ -821,7 +794,6 @@ extends SeqUnLabeledAggregate {
     def update(x: Double): SeqSingleUnLabeledAggregate
 }
 
-private[scleradb]
 case class SeqMovingAvgAggregate(
     avgCol: ColRef,
     override val param: ScalExpr,
@@ -840,7 +812,6 @@ case class SeqMovingAvgAggregate(
         List(Column(avgCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqMovingStdDevAggregate(
     varCol: ColRef,
     override val param: ScalExpr,
@@ -866,7 +837,6 @@ case class SeqMovingStdDevAggregate(
         List(Column(varCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqExpMovingAvgAggregate(
     avgCol: ColRef,
     override val param: ScalExpr,
@@ -888,7 +858,6 @@ case class SeqExpMovingAvgAggregate(
         List(Column(avgCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqAvgAggregate(
     avgCol: ColRef,
     override val param: ScalExpr,
@@ -908,7 +877,6 @@ case class SeqAvgAggregate(
         List(Column(avgCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqAvgStepAggregate(
     avgCol: ColRef,
     override val paramY: ScalExpr,
@@ -934,7 +902,6 @@ case class SeqAvgStepAggregate(
         List(Column(avgCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqStdDevAggregate(
     stdDevCol: ColRef,
     override val param: ScalExpr,
@@ -968,7 +935,6 @@ case class SeqStdDevAggregate(
         List(Column(stdDevCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqStdDevStepAggregate(
     stdDevCol: ColRef,
     override val paramY: ScalExpr,
@@ -998,7 +964,6 @@ case class SeqStdDevStepAggregate(
         List(Column(stdDevCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqVarAggregate(
     varCol: ColRef,
     override val param: ScalExpr,
@@ -1032,7 +997,6 @@ case class SeqVarAggregate(
         List(Column(varCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqVarStepAggregate(
     varCol: ColRef,
     override val paramY: ScalExpr,
@@ -1062,7 +1026,6 @@ case class SeqVarStepAggregate(
         List(Column(varCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqSkewAggregate(
     skewCol: ColRef,
     override val param: ScalExpr,
@@ -1107,7 +1070,6 @@ case class SeqSkewAggregate(
         List(Column(skewCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqSkewStepAggregate(
     skewCol: ColRef,
     override val paramY: ScalExpr,
@@ -1148,7 +1110,6 @@ case class SeqSkewStepAggregate(
         List(Column(skewCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqKurtosisAggregate(
     kurtosisCol: ColRef,
     override val param: ScalExpr,
@@ -1193,7 +1154,6 @@ case class SeqKurtosisAggregate(
         List(Column(kurtosisCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 case class SeqKurtosisStepAggregate(
     kurtosisCol: ColRef,
     override val paramY: ScalExpr,
@@ -1236,7 +1196,6 @@ case class SeqKurtosisStepAggregate(
         List(Column(kurtosisCol.name, SqlFloat(None).option))
 }
 
-private[scleradb]
 object SeqAggregate {
     def apply(
         functionName: String,

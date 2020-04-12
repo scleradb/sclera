@@ -42,7 +42,6 @@ import com.scleradb.sql.plan.RelEvalPlan
   * @param inputRows The streaming input on which the operator is evaluated
   * @param resultOrder Sort order of the result
   */
-private[scleradb]
 class BatchTableResult(
     processor: Processor,
     op: RelOp,
@@ -143,7 +142,6 @@ class BatchTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object BatchTableResult {
     def apply(
         processor: Processor,

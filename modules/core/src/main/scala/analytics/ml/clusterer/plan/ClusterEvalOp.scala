@@ -25,7 +25,6 @@ import com.scleradb.sql.plan.{RelEvalOp, RelEvalPlanResult}
 
 import com.scleradb.analytics.ml.clusterer.expr.Cluster
 
-private[scleradb]
 case class ClusterEvalOp(
     schema: Schema,
     clusterOp: Cluster

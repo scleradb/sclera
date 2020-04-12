@@ -24,7 +24,6 @@ import com.scleradb.sql.result.{TableResult, ExtendedTableRow}
 
 import com.scleradb.analytics.ml.clusterer.objects.Clusterer
 
-private[scleradb]
 class ClusterResult(
     rs: TableResult,
     clusterIdColRef: ColRef,

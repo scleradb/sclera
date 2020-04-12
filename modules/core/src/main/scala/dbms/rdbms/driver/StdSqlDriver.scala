@@ -20,7 +20,6 @@ package com.scleradb.dbms.rdbms.driver
 import java.sql.{PreparedStatement, ResultSet, Blob}
 import java.io.ByteArrayInputStream
 
-private[scleradb]
 abstract class StdSqlDriver extends SqlDriver {
     private lazy val byteStore: String =
         location.annotTableName("SCLERA_BYTESTORE")

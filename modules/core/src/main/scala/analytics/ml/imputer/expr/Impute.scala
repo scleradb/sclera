@@ -22,7 +22,6 @@ import com.scleradb.sql.expr.{RelExpr, ColRef}
 import com.scleradb.analytics.ml.imputer.datatypes.ImputeSpec
 import com.scleradb.analytics.ml.expr.MLRelOp
 
-private[scleradb]
 case class Impute(
     imputeSpecs: List[ImputeSpec]
 ) extends MLRelOp {

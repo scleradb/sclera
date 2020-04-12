@@ -25,7 +25,6 @@ import com.scleradb.sql.expr.{ScalExpr, ColRef, AnnotColRef, SortExpr}
 import com.scleradb.analytics.nlp.objects.NlpTask
 
 /** Base class for NLP / Text mining relational operators */
-private[scleradb]
 case class NlpRelOp(
     libOpt: Option[String],
     langOpt: Option[String],

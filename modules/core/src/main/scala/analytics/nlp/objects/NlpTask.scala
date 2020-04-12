@@ -59,7 +59,6 @@ abstract class NlpTask extends DbObject {
     def eval(rs: TableResult): TableResult
 }
 
-private[scleradb]
 object NlpTask {
     def apply(
         libOpt: Option[String],

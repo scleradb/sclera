@@ -30,7 +30,6 @@ import com.scleradb.analytics.ml.clusterer.datatypes.ClusterResult
 
 /** Abstract base class for clusterer libraries */
 abstract class Clusterer extends MLObject {
-    private[scleradb]
     override def typeStr: String = Clusterer.typeStr
 
     /** Clusterer name */
@@ -58,11 +57,9 @@ abstract class Clusterer extends MLObject {
     /** Clusterer description */
     override def description: String
 
-    private[scleradb]
     override def schemaObject: SchemaClusterer = SchemaClusterer(this)
 }
 
-private[scleradb]
 object Clusterer {
     val typeStr: String = "CLUSTERER"
 
@@ -78,10 +75,8 @@ object Clusterer {
         )
 }
 
-private[scleradb]
 class SchemaClusterer(override val obj: Clusterer) extends SchemaMLObject
 
-private[scleradb]
 object SchemaClusterer {
     def apply(clusterer: Clusterer): SchemaClusterer =
         new SchemaClusterer(clusterer)

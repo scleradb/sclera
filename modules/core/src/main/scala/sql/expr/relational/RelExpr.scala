@@ -54,13 +54,11 @@ abstract class RelExpr extends LogicalExpr {
     val starColumns: List[AnnotColRef]
 
     /** Returns at most maxRows, retaining the order */
-    private[scleradb]
     def limit(maxRows: Int): RelExpr =
         RelOpExpr(LimitOffset(Some(maxRows), 0, resultOrder), List(this))
 }
 
 // relational expression with a name, containing named columns
-private[scleradb]
 abstract class RelBaseExpr extends RelExpr {
     val name: String
 
@@ -77,10 +75,8 @@ abstract class RelBaseExpr extends RelExpr {
 }
 
 // explicit values (rows of scalars)
-private[scleradb]
 sealed abstract class ValuesBase extends RelBaseExpr
 
-private[scleradb]
 case class Values(
     override val schema: Schema,
     rows: List[Row]
@@ -109,7 +105,6 @@ case class Values(
     override val resultOrder: List[SortExpr] = Nil
 }
 
-private[scleradb]
 case class ResultValues(
     override val schema: Schema,
     tableResult: TableResult
@@ -126,7 +121,6 @@ case class ResultValues(
 }
 
 // references a table or view
-private[scleradb]
 trait RelRefSource extends RelBaseExpr {
     val name: String
     val aliasCols: List[ColRef]
@@ -146,7 +140,6 @@ trait RelRefSource extends RelBaseExpr {
 }
 
 // base table reference
-private[scleradb]
 sealed abstract class TableRef extends RelBaseExpr {
     val schemaTable: SchemaTable
 
@@ -163,7 +156,6 @@ sealed abstract class TableRef extends RelBaseExpr {
 }
 
 // tableref as target
-private[scleradb]
 trait TableRefTarget extends TableRef {
     val name: String
     val targetCols: List[ColRef]
@@ -205,13 +197,11 @@ trait TableRefTarget extends TableRef {
     }
 }
 
-private[scleradb]
 trait TableRefSource extends TableRef with RelRefSource {
     override lazy val tableColRefs: List[ColRef] =
         aliasCols:::table.columnRefs.drop(aliasCols.size)
 }
 
-private[scleradb]
 sealed abstract class TableRefByName extends TableRef {
     // needs to be lazy because this tableref might not exist yet
     override lazy val schemaTable: SchemaTable =
@@ -231,21 +221,18 @@ sealed abstract class TableRefByName extends TableRef {
     override lazy val tableId: TableId = schemaTable.id
 }
 
-private[scleradb]
 case class TableRefTargetByName(
     override val schema: Schema,
     override val name: String,
     override val targetCols: List[ColRef] = Nil
 ) extends TableRefByName with TableRefTarget
 
-private[scleradb]
 case class TableRefSourceByName(
     override val schema: Schema,
     override val name: String,
     override val aliasCols: List[ColRef] = Nil
 ) extends TableRefByName with TableRefSource
 
-private[scleradb]
 sealed abstract class TableRefById extends TableRef {
     // needs to be lazy because this tableref might not exist yet
     override lazy val schemaTable: SchemaTable =
@@ -260,21 +247,18 @@ sealed abstract class TableRefById extends TableRef {
     override val name: String = tableId.name
 }
 
-private[scleradb]
 case class TableRefTargetById(
     override val schema: Schema,
     override val tableId: TableId,
     override val targetCols: List[ColRef] = Nil
 ) extends TableRefById with TableRefTarget
 
-private[scleradb]
 case class TableRefSourceById(
     override val schema: Schema,
     override val tableId: TableId,
     override val aliasCols: List[ColRef] = Nil
 ) extends TableRefById with TableRefSource
 
-private[scleradb]
 sealed abstract class TableRefByIdString extends TableRef {
     val tableIdStr: String
 
@@ -292,34 +276,29 @@ sealed abstract class TableRefByIdString extends TableRef {
     override lazy val name: String = schemaTable.obj.name
 }
 
-private[scleradb]
 case class TableRefTargetByIdString(
     override val schema: Schema,
     override val tableIdStr: String,
     override val targetCols: List[ColRef] = Nil
 ) extends TableRefByIdString with TableRefTarget
 
-private[scleradb]
 case class TableRefSourceByIdString(
     override val schema: Schema,
     override val tableIdStr: String,
     override val aliasCols: List[ColRef] = Nil
 ) extends TableRefByIdString with TableRefSource
 
-private[scleradb]
 sealed abstract class TableRefExplicit extends TableRef {
     override val name: String = schemaTable.obj.name
     override val tableId: TableId = schemaTable.id
 }
 
-private[scleradb]
 case class TableRefTargetExplicit(
     override val schema: Schema,
     override val schemaTable: SchemaTable,
     override val targetCols: List[ColRef] = Nil
 ) extends TableRefExplicit with TableRefTarget
 
-private[scleradb]
 case class TableRefSourceExplicit(
     override val schema: Schema,
     override val schemaTable: SchemaTable,
@@ -327,7 +306,6 @@ case class TableRefSourceExplicit(
 ) extends TableRefExplicit with TableRefSource
 
 // view reference
-private[scleradb]
 sealed abstract class ViewRef extends RelBaseExpr with RelRefSource {
     val schemaView: SchemaView
     val viewId: ViewId
@@ -350,7 +328,6 @@ sealed abstract class ViewRef extends RelBaseExpr with RelRefSource {
         }
 }
 
-private[scleradb]
 case class ViewRefByName(
     override val schema: Schema,
     override val name: String,
@@ -370,7 +347,6 @@ case class ViewRefByName(
     override lazy val viewId: ViewId = schemaView.id
 }
 
-private[scleradb]
 case class ViewRefById(
     override val schema: Schema,
     override val viewId: ViewId,
@@ -386,7 +362,6 @@ case class ViewRefById(
     override val name: String = viewId.name
 }
 
-private[scleradb]
 case class ViewRefExplicit(
     override val schemaView: SchemaView,
     override val aliasCols: List[ColRef] = Nil
@@ -397,7 +372,6 @@ case class ViewRefExplicit(
 }
 
 // relational expression tree
-private[scleradb]
 case class RelOpExpr(
     op: RelOp,
     inputs: List[RelExpr],
@@ -428,7 +402,6 @@ case class RelOpExpr(
 }
 
 // helps instantiate a table/view when not clear from context
-private[scleradb]
 object RelExpr {
     def tableRef(
         schema: Schema,

@@ -29,7 +29,6 @@ import com.scleradb.sql.result.TableRowGroupIterator
 
 import com.scleradb.analytics.sequence.matcher.aggregate._
 
-private[scleradb]
 class LabelSequenceMatchResult(
     evaluator: ScalExprEvaluator,
     isEmptyResultAllowed: Boolean,

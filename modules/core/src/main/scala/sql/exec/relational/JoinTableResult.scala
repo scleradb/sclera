@@ -23,7 +23,6 @@ import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.TableResult
 
 /** Computes the join two input streams */
-private[scleradb]
 abstract class JoinTableResult extends TableResult {
     val joinType: JoinType
     protected def lhsColumns: List[Column]

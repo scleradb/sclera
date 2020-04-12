@@ -22,13 +22,10 @@ import com.scleradb.sql.result.TableResult
 
 import com.scleradb.plan.PlanResult
 
-private[scleradb]
 sealed abstract class RelPlanResult extends PlanResult
 
-private[scleradb]
 case class RelExprPlanResult(relExpr: RelExpr) extends RelPlanResult
 
-private[scleradb]
 case class RelEvalPlanResult(tableResult: TableResult) extends RelPlanResult {
     def close(): Unit = tableResult.close()
 }

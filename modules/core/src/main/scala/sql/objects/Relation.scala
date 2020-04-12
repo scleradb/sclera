@@ -27,10 +27,8 @@ abstract class Relation extends DbObject {
     val columnRefs: List[ColRef]
 }
 
-private[scleradb]
 abstract class RelationId extends SchemaObjectId
 
-private[scleradb]
 abstract class SchemaRelation extends SchemaObject {
     override val obj: Relation
     override val id: RelationId

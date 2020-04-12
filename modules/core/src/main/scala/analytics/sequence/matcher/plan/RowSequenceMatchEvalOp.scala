@@ -28,7 +28,6 @@ import com.scleradb.sql.exec.ScalExprEvaluator
 
 import com.scleradb.analytics.sequence.matcher.expr.LabeledMatch
 
-private[scleradb]
 case class RowSequenceMatchEvalOp(
     evaluator: ScalExprEvaluator,
     labels: ScalTableRow => List[Label],

@@ -39,7 +39,6 @@ object ReadWriteLocation extends LocationPermit {
 }
 
 /** Companion object - contains constructors for LocationPermit */
-private[scleradb]
 object LocationPermit {
     /** Construct LocationPermit object given the string represetation
       *

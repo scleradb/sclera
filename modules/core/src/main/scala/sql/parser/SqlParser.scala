@@ -31,7 +31,6 @@ import com.scleradb.sql.types.SqlType
 import com.scleradb.sql.statements.SqlStatement
 import com.scleradb.sql.exec.ScalExprEvaluator
 
-private[scleradb]
 abstract class SqlParser(
     val schema: Schema, // associated schema
     val scalExprEvaluator: ScalExprEvaluator // scalar expr evaluator

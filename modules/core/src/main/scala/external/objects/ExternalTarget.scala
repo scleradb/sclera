@@ -33,7 +33,6 @@ abstract class ExternalTarget extends java.io.Serializable {
 }
 
 /** Companion object - helps create external data target objects */
-private[scleradb]
 object ExternalTarget {
     /** Get an external data target object from a data service
       * @param name External data service identifier

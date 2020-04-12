@@ -33,7 +33,6 @@ abstract class ExternalFunction extends java.io.Serializable {
 }
 
 /** Companion object - helps create external function objects */
-private[scleradb]
 object ExternalFunction {
     /** Get an external functuon object from a function service
       * @param name External function service identifier

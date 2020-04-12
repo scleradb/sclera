@@ -28,14 +28,12 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow}
 import com.scleradb.external.objects.ExternalFunction
 
 /** PG Catalog functions - base class */
-private[scleradb]
 sealed abstract class PgCatalogFunction extends ExternalFunction {
     /** String used for this source in the EXPLAIN output */
     override def toString: String = "PG_CATALOG." + name
 }
 
 /** Function PG_GET_USERBYID */
-private[scleradb]
 object PgGetUserById extends PgCatalogFunction {
     override val name: String = "PG_GET_USERBYID"
 
@@ -52,7 +50,6 @@ object PgGetUserById extends PgCatalogFunction {
 }
 
 /** Function PG_TABLE_IS_VISIBLE */
-private[scleradb]
 object PgTableIsVisible extends PgCatalogFunction {
     override val name: String = "PG_TABLE_IS_VISIBLE"
 
@@ -68,7 +65,6 @@ object PgTableIsVisible extends PgCatalogFunction {
 }
 
 /** Function FORMAT_TYPE */
-private[scleradb]
 object PgFormatType extends PgCatalogFunction {
     override val name: String = "FORMAT_TYPE"
 
@@ -85,7 +81,6 @@ object PgFormatType extends PgCatalogFunction {
     }
 }
 
-private[scleradb]
 class PgNullFunction(
     override val name: String,
     override val resultType: SqlType
@@ -94,7 +89,6 @@ class PgNullFunction(
         SqlNull(resultType)
 }
 
-private[scleradb]
 object PgCatalogFunction {
     /** The function source name */
     val name: String = "PG_CATALOG"

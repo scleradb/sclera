@@ -26,7 +26,6 @@ import com.scleradb.sql.result.{TableResult, ScalTableRow}
   * @param predExpr Predicate for filtering the input rows
   * @param inputResult Table result to be wrapped over
   */
-private[scleradb]
 class SelectTableResult(
     evaluator: ScalExprEvaluator,
     predExpr: ScalExpr,
@@ -48,7 +47,6 @@ class SelectTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object SelectTableResult {
     def apply(
         evaluator: ScalExprEvaluator,

@@ -26,7 +26,6 @@ import com.scleradb.sql.result.{TableResult, ExtendedTableRow}
 
 import com.scleradb.analytics.ml.classifier.objects.Classifier
 
-private[scleradb]
 class ImputeResult(
     schema: Schema,
     rs: TableResult,

@@ -36,7 +36,6 @@ import com.scleradb.config.ScleraConfig
 
 import com.scleradb.analytics.ml.objects.SchemaMLObject
 
-private[scleradb]
 class Schema(
     processor: Processor,
     schemaDbms: String,

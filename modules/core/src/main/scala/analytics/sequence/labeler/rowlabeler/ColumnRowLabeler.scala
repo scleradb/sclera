@@ -26,7 +26,6 @@ import com.scleradb.sql.result.ScalTableRow
 import com.scleradb.sql.exec.ScalCastEvaluator
 
 // labels read from an input column
-private[scleradb]
 case class ColumnRowLabeler(
     col: ColRef,
     whenThen: List[(List[ScalColValue], List[Label])] = Nil,

@@ -54,7 +54,6 @@ import com.scleradb.analytics.sequence.matcher.aggregate._
 import com.scleradb.analytics.transform.plan.TransformEvalOp
 import com.scleradb.analytics.infertypes.plan.InferTypesEvalOp
 
-private[scleradb]
 class PlanExplain(
     normalizer: Normalizer,
     planner: Planner,

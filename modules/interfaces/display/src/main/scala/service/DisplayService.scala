@@ -30,7 +30,6 @@ abstract class DisplayService extends ScleraService {
     def createDisplay(params: List[String]): Display
 }
 
-private[scleradb]
 object DisplayService extends ScleraServiceLoader(classOf[DisplayService]) {
     def apply(idOpt: Option[String] = None): DisplayService =
         apply(idOpt getOrElse ScleraConfig.defaultDisplayService)

@@ -25,7 +25,6 @@ import org.h2.server.pg.{PgServer => H2PgServer}
 import com.scleradb.exec.Schema
 import com.scleradb.external.expr.{ExternalSourceExpr, ExternalScalarFunction}
 
-private[scleradb]
 class PgCatalog(schema: Schema) {
     private val pgSourceCache: TrieMap[String, PgCatalogSource] = TrieMap()
 
@@ -47,7 +46,6 @@ class PgCatalog(schema: Schema) {
     }
 }
 
-private[scleradb]
 object PgCatalog {
     def apply(schema: Schema): PgCatalog = new PgCatalog(schema)
 

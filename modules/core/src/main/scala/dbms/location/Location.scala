@@ -62,7 +62,6 @@ abstract class Location {
         dbSchemaOpt.map { s => s + "." + name } getOrElse name
 }
 
-private[scleradb]
 object Location {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
 

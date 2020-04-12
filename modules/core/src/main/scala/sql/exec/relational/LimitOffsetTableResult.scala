@@ -26,7 +26,6 @@ import com.scleradb.sql.result.{TableResult, TableRow}
   * @param offset Offset
   * @param inputResult Streaming input on which the operator is evaluated
   */
-private[scleradb]
 class LimitOffsetTableResult(
     limitOpt: Option[Int],
     offset: Int,
@@ -45,7 +44,6 @@ class LimitOffsetTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object LimitOffsetTableResult {
     def apply(
         limitOpt: Option[Int],

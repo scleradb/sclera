@@ -27,7 +27,6 @@ import com.scleradb.sql.expr.ColRef
 import com.scleradb.analytics.ml.objects.MLObjectId
 import com.scleradb.analytics.ml.classifier.objects._
 
-private[scleradb]
 case class ImputeSpec(
     imputeColRef: ColRef,
     flagColRefOpt: Option[ColRef],

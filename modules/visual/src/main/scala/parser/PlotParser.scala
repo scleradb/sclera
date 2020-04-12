@@ -25,7 +25,6 @@ import com.scleradb.sql.parser.SqlQueryParser
 import com.scleradb.visual.model.plot._
 import com.scleradb.visual.model.spec._
 
-private[scleradb]
 trait PlotParser extends SqlQueryParser {
     lexical.delimiters ++= Seq("(", ")", ",", "=" )
     lexical.reserved ++= Seq(

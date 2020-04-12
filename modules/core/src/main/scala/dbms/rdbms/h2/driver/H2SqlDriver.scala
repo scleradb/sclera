@@ -21,7 +21,6 @@ import com.scleradb.dbms.location.Location
 import com.scleradb.sql.mapper.SqlMapper
 import com.scleradb.dbms.rdbms.driver.StdSqlDriver
 
-private[scleradb]
 class H2SqlDriver(
     override val location: Location,
     override val sqlMapper: SqlMapper,

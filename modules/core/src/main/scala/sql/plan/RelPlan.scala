@@ -31,20 +31,17 @@ import com.scleradb.sql.exec.ValuesTableResult
 
 import com.scleradb.plan._
 
-private[scleradb]
 abstract class RelPlan extends Plan {
     val relExpr: RelExpr
     def resultOrder: List[SortExpr] = relExpr.resultOrder
     override def result: RelPlanResult
 }
 
-private[scleradb]
 abstract class RelExprPlan extends RelPlan {
     val locationIdOpt: Option[LocationId]
     override def result: RelExprPlanResult
 }
 
-private[scleradb]
 case class RelEvalExprPlan(
     processor: Processor,
     override val locationIdOpt: Option[LocationId],
@@ -92,7 +89,6 @@ case class RelEvalExprPlan(
         "] Evaluate = (" + inputPlan + ")"
 }
 
-private[scleradb]
 case class RelBaseExprPlan(
     override val relExpr: RelBaseExpr
 ) extends RelExprPlan {
@@ -112,7 +108,6 @@ case class RelBaseExprPlan(
     }
 }
 
-private[scleradb]
 case class RelOpExprPlan(
     override val relExpr: RelExpr,
     op: RelExprOp,
@@ -147,12 +142,10 @@ case class RelOpExprPlan(
     }
 }
 
-private[scleradb]
 abstract class RelEvalPlan extends RelPlan {
     override def result: RelEvalPlanResult
 }
 
-private[scleradb]
 case class RelTableResultPlan(
     schema: Schema,
     tableResult: TableResult
@@ -168,7 +161,6 @@ case class RelTableResultPlan(
     override def toString: String = "[TableResult]"
 }
 
-private[scleradb]
 case class RelValuesPlan(
     values: Values
 ) extends RelEvalPlan {
@@ -184,7 +176,6 @@ case class RelValuesPlan(
     override def toString: String = "[Values = " + values + "]"
 }
 
-private[scleradb]
 case class RelExprEvalPlan(
     processor: Processor,
     override val relExpr: RelExpr,
@@ -211,7 +202,6 @@ case class RelExprEvalPlan(
     override def toString: String = "Evaluate = (" + inputPlan + ")"
 }
 
-private[scleradb]
 case class RelOpEvalPlan(
     override val relExpr: RelExpr,
     op: RelEvalOp,

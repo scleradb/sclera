@@ -30,7 +30,6 @@ import com.scleradb.sql.result.{TableRowGroup, TableRowGroupIterator}
   * @param rhsInput Right input stream
   * @param rhsCol Join column of the right input stream
   */
-private[scleradb]
 class EquiMergeJoinTableResult(
     evaluator: ScalExprEvaluator,
     override val joinType: JoinType,
@@ -78,7 +77,6 @@ class EquiMergeJoinTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object EquiMergeJoinTableResult {
     def apply(
         evaluator: ScalExprEvaluator,
@@ -103,7 +101,6 @@ object EquiMergeJoinTableResult {
   * @param rhsInput Right input stream
   * @param rhsCol Join column of the right input stream
   */
-private[scleradb]
 class AlignedGroupsIterator(
     evaluator: ScalExprEvaluator,
     joinType: JoinType,

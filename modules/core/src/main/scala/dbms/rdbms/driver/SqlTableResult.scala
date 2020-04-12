@@ -24,7 +24,6 @@ import com.scleradb.sql.types.SqlType
 import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.TableResult
 
-private[scleradb]
 class SqlTableResult(
     statement: Statement,
     queryStr: String,
@@ -101,7 +100,6 @@ class SqlTableResult(
     }
 }
 
-private[scleradb]
 object SqlTableResult {
     def apply(
         statement: Statement,

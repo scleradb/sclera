@@ -22,7 +22,6 @@ import com.scleradb.sql.objects.TableId
 import com.scleradb.dbms.location._
 
 // SQL ADMIN parser
-private[scleradb]
 trait SqlAdminParser extends SqlQueryParser with SqlCudParser {
     override def sqlStatement: Parser[SqlStatement] = super.sqlStatement |
         sqlAdminStatement | sqlAdminQueryStatement | sqlExplainStatement

@@ -26,7 +26,6 @@ import com.scleradb.sql.result.TableResult
 
 import com.scleradb.analytics.sequence.labeler.RowLabeler
 
-private[scleradb]
 sealed abstract class SeqAggregateColSpec extends java.io.Serializable {
     val resultColRef: ColRef
     val labels: List[Label]
@@ -35,7 +34,6 @@ sealed abstract class SeqAggregateColSpec extends java.io.Serializable {
     def repr: String
 }
 
-private[scleradb]
 case class SeqColumnSpec(
     override val resultColRef: ColRef,
     colRef: ColRef,
@@ -68,7 +66,6 @@ case class SeqColumnSpec(
     }
 }
 
-private[scleradb]
 case class SeqFunctionSpec(
     override val resultColRef: ColRef,
     funcName: String,

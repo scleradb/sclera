@@ -31,7 +31,6 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.datatypes.{Column, PrimaryKey, ForeignKey}
 import com.scleradb.sql.result.TableResult
 
-private[scleradb]
 class SqlMetadataDriver(
     val driver: SqlDriver,
     val metaData: DatabaseMetaData

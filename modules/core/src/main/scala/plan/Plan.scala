@@ -17,14 +17,12 @@
 
 package com.scleradb.plan
 
-private[scleradb]
 abstract class Plan {
     def init(): Unit
     def result: PlanResult
     def dispose(): Unit
 }
 
-private[scleradb]
 object Plan {
     def cleanInit(plans: List[Plan]): Unit =
         plans.foldLeft (List[Plan]()) { case (prevPlans, plan) =>
@@ -37,5 +35,4 @@ object Plan {
         }
 }
 
-private[scleradb]
 abstract class PlanResult

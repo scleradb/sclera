@@ -27,7 +27,6 @@ import com.scleradb.sql.result.ScalTableRow
 
 import com.scleradb.external.expr.ExternalScalarFunction
 
-private[scleradb]
 class ScalExprEvaluator(processor: Processor) {
     import com.scleradb.sql.exec.ScalCastEvaluator._
 

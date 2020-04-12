@@ -22,7 +22,6 @@ import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.{TableResult, ScalTableRow}
 
 /** Result of a VALUES expression */
-private[scleradb]
 class ValuesTableResult(
     aliasCols: List[ColRef],
     values: List[Row]
@@ -53,7 +52,6 @@ class ValuesTableResult(
 }
 
 /** Companion object containing the constructor */
-private[scleradb]
 object ValuesTableResult {
     def apply(
         aliasCols: List[ColRef],
