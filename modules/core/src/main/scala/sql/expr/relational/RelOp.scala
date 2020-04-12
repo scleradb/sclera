@@ -723,28 +723,6 @@ case object EvaluateOp extends ExtendedRelOp {
         inputs.head.starColumns
 }
 
-/*
-private[scleradb]
-case class Materialize(locationId: LocationId) extends ExtendedRelOp {
-    override val arity: Int = 1
-
-    override def resultOrder(inputs: List[RelExpr]): List[SortExpr] =
-        inputs.head match {
-            case RelOpExpr(Order(sortExprs), _) => sortExprs
-            case LimitOffset(_, _, sortExprs) => sortExprs
-            case DistinctOn(_, sortExprs) => sortExprs
-            case _ => Nil
-        }
-
-    override def tableColRefs(inputs: List[RelExpr]): List[ColRef] =
-        inputs.head.tableColRefs
-    override def tableNames(inputs: List[RelExpr]): List[String] =
-        inputs.head.tableNames
-    override def starColumns(inputs: List[RelExpr]): List[AnnotColRef] =
-        inputs.head.starColumns
-}
-*/
-
 private[scleradb]
 case class Align(
     distanceExpr: ScalExpr,
