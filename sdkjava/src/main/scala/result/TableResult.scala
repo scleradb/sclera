@@ -61,6 +61,6 @@ object TableResult {
 
         override def sortExprs: Array[SortExpr] = result.resultOrder.toArray
 
-        override def close(): Unit = { result.close() }
+        override def close(): Unit = result.close()
     }
 }
