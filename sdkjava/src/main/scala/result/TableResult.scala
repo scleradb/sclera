@@ -42,7 +42,10 @@ abstract class TableResult extends ScalaTableResult {
     /** Ordering of the rows in the result */
     def sortExprs: Array[SortExpr]
     /** Ordering of the rows in the result (Scala) */
-    override lazy val resultOrder: List[SortExpr] = sortExprs.toList
+    override lazy val resultOrder: List[SortExpr] = Option(sortExprs) match {
+        case Some(xs) => xs.toList
+        case None => Nil
+    }
 
     /** Close the result, and free the resources */
     override def close(): Unit
