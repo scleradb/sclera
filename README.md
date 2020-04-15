@@ -1,4 +1,4 @@
-# Sclera Analytics Virtualization Platform
+# Sclera - Extensible Data Processing
 
 [![Build Status](https://travis-ci.org/scleradb/sclera.svg?branch=master)](https://travis-ci.org/scleradb/sclera)
 
