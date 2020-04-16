@@ -471,15 +471,16 @@ case class ClobConst(
 }
 
 /** SQL NULL */
-sealed abstract class SqlNull extends ScalColValue
-
-case class SqlTypedNull(
-    override val sqlBaseType: SqlType
-) extends SqlNull {
+sealed abstract class SqlNull extends ScalColValue {
     override def isNull: Boolean = true
     override def defaultAlias: String = "NULL"
     override def coverValue: Option[Any] = None
 }
+
+/** Typed SQL NULL */
+case class SqlTypedNull(
+    override val sqlBaseType: SqlType
+) extends SqlNull
 
 object SqlNull {
     def apply(t: SqlType): SqlNull = new SqlTypedNull(t.baseType)
