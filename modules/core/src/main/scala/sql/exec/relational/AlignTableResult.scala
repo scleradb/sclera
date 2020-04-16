@@ -25,7 +25,7 @@ import com.scleradb.sql.expr.{ScalExpr, SortExpr}
 import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.{TableResult, ScalTableRow, ConcatTableRow}
 
-/** Computes the equi-join of two input streams
+/** Computes the alignment between two input streams
   * @param evaluator Scalar expression evaluator
   * @param distExpr Expression for the distance metric
   * @param marginOpt Margin for matching (max lead/lag)
