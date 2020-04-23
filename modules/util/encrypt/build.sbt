@@ -2,12 +2,12 @@ name := "sclera-encrypt"
 
 description := "Data encryptor and decryptor"
 
-homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+homepage := Some(url("https://github.com/scleradb/sclera/tree/master/modules/util/encrypt"))
 
 scmInfo := Some(
     ScmInfo(
-        url(s"https://github.com/scleradb/${name.value}"),
-        s"scm:git@github.com:scleradb/${name.value}.git"
+        url("https://github.com/scleradb/sclera"),
+        "scm:git@github.com:scleradb/sclera.git"
     )
 )
 

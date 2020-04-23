@@ -2,12 +2,12 @@ name := "sclera-regexparser"
 
 description := "Regular expression parser, generates a non-deterministic finite automata"
 
-homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+homepage := Some(url("https://github.com/scleradb/sclera/tree/master/modules/util/regexparser"))
 
 scmInfo := Some(
     ScmInfo(
-        url(s"https://github.com/scleradb/${name.value}"),
-        s"scm:git@github.com:scleradb/${name.value}.git"
+        url("https://github.com/scleradb/sclera"),
+        "scm:git@github.com:scleradb/sclera.git"
     )
 )
 

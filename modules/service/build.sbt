@@ -2,11 +2,11 @@ name := "sclera-service"
 
 description := "Framework for creating and discovering/loading add-on packages for Sclera"
 
-homepage := Some(url(s"https://github.com/scleradb/${name.value}"))
+homepage := Some(url("https://github.com/scleradb/sclera/tree/master/modules/service"))
 
 scmInfo := Some(
     ScmInfo(
-        url(s"https://github.com/scleradb/${name.value}"),
-        s"scm:git@github.com:scleradb/${name.value}.git"
+        url("https://github.com/scleradb/sclera"),
+        "scm:git@github.com:scleradb/sclera.git"
     )
 )
