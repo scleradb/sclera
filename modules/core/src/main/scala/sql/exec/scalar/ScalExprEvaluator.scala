@@ -345,16 +345,16 @@ class ScalExprEvaluator(processor: Processor) {
         case (IsLike(Pattern(pat, esc)), lhs) =>
             val escLiteral: String = if( esc == "\\") (esc + esc) else esc
             val rewrite: String =
-                pat.replaceAllLiterally(esc + "_", "$SCLERA1$").
-                    replaceAllLiterally(esc + "%", "$SCLERA2$").
-                    replaceAllLiterally(esc + esc, "$SCLERA3$").
-                    replaceAllLiterally(".", "\\.").
-                    replaceAllLiterally("*", "\\*").
-                    replaceAllLiterally("_", ".").
-                    replaceAllLiterally("%", ".*").
-                    replaceAllLiterally("$SCLERA1$", "_").
-                    replaceAllLiterally("$SCLERA2$", "%").
-                    replaceAllLiterally("$SCLERA3$", escLiteral)
+                pat.replace(esc + "_", "$SCLERA1$").
+                    replace(esc + "%", "$SCLERA2$").
+                    replace(esc + esc, "$SCLERA3$").
+                    replace(".", "\\.").
+                    replace("*", "\\*").
+                    replace("_", ".").
+                    replace("%", ".*").
+                    replace("$SCLERA1$", "_").
+                    replace("$SCLERA2$", "%").
+                    replace("$SCLERA3$", escLiteral)
 
             eval(IsSimilarTo(Pattern(rewrite, "\\")), lhs)
 
@@ -369,9 +369,9 @@ class ScalExprEvaluator(processor: Processor) {
         case (IsSimilarTo(Pattern(pat, esc)), List(CharConst(s))) =>
             val rewrite: String =
                 if( esc == "\\" ) pat
-                else pat.replaceAllLiterally(esc, "$SCLERAESC$").
-                         replaceAllLiterally("\\", "\\\\").
-                         replaceAllLiterally("$SCLERAESC$", "\\")
+                else pat.replace(esc, "$SCLERAESC$").
+                         replace("\\", "\\\\").
+                         replace("$SCLERAESC$", "\\")
 
             BoolConst(s.matches(rewrite))
 

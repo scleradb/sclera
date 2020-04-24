@@ -17,7 +17,7 @@ ThisBuild / startYear := Some(2012)
 
 ThisBuild / licenses := Seq("Apache License version 2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-ThisBuild / scalaVersion := "2.13.1"
+ThisBuild / scalaVersion := "2.13.2"
 
 ThisBuild / scalacOptions ++= Seq(
     "-Werror", "-feature", "-deprecation", "-unchecked",

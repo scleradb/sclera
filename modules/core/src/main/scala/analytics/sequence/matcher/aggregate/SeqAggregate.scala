@@ -1045,8 +1045,10 @@ case class SeqSkewAggregate(
 
                 if( isSamp ) {
                     if( count <= 2 ) SqlNull(SqlFloat(None))
-                    else DoubleConst(skewxpop *
-                                     scala.math.sqrt(count*(count-1))/(count-2))
+                    else DoubleConst(
+                        skewxpop *
+                        scala.math.sqrt(count.toDouble*(count-1))/(count-2)
+                    )
                 } else DoubleConst(skewxpop)
             }
         }
