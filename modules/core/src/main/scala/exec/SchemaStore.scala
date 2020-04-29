@@ -45,6 +45,7 @@ import com.scleradb.sql.mapper.default.{ScleraSQLMapper => SqlMapper}
 
 import com.scleradb.analytics.ml.objects.{MLObjectId, SchemaMLObject}
 
+/** Metadata storage manager */
 class SchemaStore(processor: Processor, schemaDbHandler: DbHandler) {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
     private val encryptor: Encryptor = Encryptor(ScleraConfig.encryptKey)

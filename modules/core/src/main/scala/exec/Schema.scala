@@ -36,6 +36,7 @@ import com.scleradb.config.ScleraConfig
 
 import com.scleradb.analytics.ml.objects.SchemaMLObject
 
+/** Manages metadata for all objects */
 class Schema(
     processor: Processor,
     schemaDbms: String,

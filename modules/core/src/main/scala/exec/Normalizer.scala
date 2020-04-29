@@ -52,6 +52,7 @@ import com.scleradb.util.automata.nfa.AnchoredNfa
 
 import com.scleradb.util.tools.Counter
 
+/** Normalizes statements before evaluation */
 class Normalizer(
     schema: Schema,
     scalExprEvaluator: ScalExprEvaluator

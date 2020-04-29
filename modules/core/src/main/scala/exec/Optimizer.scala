@@ -36,7 +36,7 @@ import com.scleradb.util.automata.datatypes.Label
 
 import com.scleradb.util.tools.Counter
 
-// TODO: temporary patch -- hurried implementation, to be reimplemented
+/** Rule-based relational expression optimizer */
 object Optimizer {
     def optimizeRelExpr(relExpr: RelExpr, n: Int = 0): RelExpr =
         if( n < 100 ) { // capping the number of invocations at 100

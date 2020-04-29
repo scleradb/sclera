@@ -28,6 +28,7 @@ import com.scleradb.sql.statements._
 import com.scleradb.sql.datatypes.Column
 import com.scleradb.sql.result.{TableResult, TableRow}
 
+/** Handler for the given location */
 class DbHandler(val location: Location) {
     private val driver: StatementDriver =
         try location.driver catch { case (e: Throwable) =>
@@ -115,6 +116,7 @@ class DbHandler(val location: Location) {
     def close(): Unit = driver.close()
 }
 
+/** Companion object for class `DbHandler` */
 object DbHandler {
     def apply(location: Location): DbHandler = new DbHandler(location)
 

@@ -48,6 +48,16 @@ import com.scleradb.analytics.ml.clusterer.objects._
 
 import com.scleradb.external.objects.ExternalTarget
 
+/** Sclera statement processor
+  *
+  * @param schemaDbms DBMS to be used to store Sclera's schema tables
+  * @param schemaDb Designated database in the schema DBMS specified above
+  * @param schemaDbConfig Configuration for the schema DBMS connection
+  * @param tempDbms DBMS to be used to store temporary tables
+  * @param tempDb Designated database in the temporary DBMS specified above
+  * @param tempDbConfig Configuration for the temporary DBMS connection
+  * @param checkSchema Check schema during initialization
+  */
 class Processor(
     schemaDbms: String,
     val schemaDb: String,
@@ -59,29 +69,38 @@ class Processor(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
 
+    /** Associated schema object */
     lazy val schema: Schema = new Schema(
         processor = this, schemaDbms = schemaDbms,
         schemaDb = schemaDb, schemaDbConfig = schemaDbConfig,
         tempDbms = tempDbms, tempDb = tempDb, tempDbConfig = tempDbConfig
     )
 
+    /** Designated location for the data cache (needed for query evaluation) */
     def dataCacheLocation = Location.dataCacheLocation(schema)
 
+    /** Scalar expression evaluator */
     val scalExprEvaluator: ScalExprEvaluator = new ScalExprEvaluator(this)
+    /** ScleraSQL and admin statement parser */
     val parser: SqlParser =
         new SqlParser(schema, scalExprEvaluator)
         with SqlQueryParser with SqlCudParser with SqlAdminParser
 
+    /** Statement normalizer */
     val normalizer: Normalizer = new Normalizer(schema, scalExprEvaluator)
+    /** Statement execution planner */
     val planner: Planner = new Planner(this)
+    /** Statement execution plan explainer (needed for EXPLAIN commands) */
     val planExplain: PlanExplain =
         new PlanExplain(normalizer, planner, scalExprEvaluator)
 
+    /** Initialize */
     def init(): Unit = {
         schema.init()
         if( checkSchema ) schema.checkSchemaStore()
     }
 
+    /** Handler for the specified location */
     def locationDbHandler(locationId: LocationId): DbHandler =
         schema.dbHandlerOpt(locationId) getOrElse {
             throw new IllegalArgumentException(
@@ -89,6 +108,13 @@ class Processor(
             )
         }
 
+    /** Handle a query statement
+      *
+      * @param qstr Query string
+      * @param f Function to handle the returned result.
+      *          The result should not be closed by the function,
+      *          it will be closed automatically when done.
+      */
     def handleStatement[T](
         qstr: String,
         f: TableResult => T
@@ -102,7 +128,11 @@ class Processor(
             )
     }
 
-    def handleStatement[T](ustr: String): Unit =
+    /** Handle an update or admin statement
+      *
+      * @param ustr Statement string
+      */
+    def handleStatement(ustr: String): Unit =
         parser.parseSqlStatements(ustr) match {
             case List(ustmt: SqlUpdateStatement) =>
                 handleUpdateStatement(ustmt)
@@ -117,6 +147,13 @@ class Processor(
                 )
         }
 
+    /** Handle a parsed query statement
+      *
+      * @param qstmt Parsed query statement
+      * @param f Function to handle the returned result.
+      *          The result should not be closed by the function,
+      *          it will be closed automatically when done.
+      */
     def handleQueryStatement[T](
         qstmt: SqlRelQueryStatement,
         f: TableResult => T
@@ -133,11 +170,25 @@ class Processor(
             throw e
         }
 
+    /** Handle a query specified as a relational expression
+      *
+      * @param query Relational expression to be evaluated
+      * @param f Function to handle the returned result.
+      *          The result should not be closed by the function,
+      *          it will be closed automatically when done.
+      */
     def handleQuery[T](
         query: RelExpr,
         f: TableResult => T
     ): T = handleQueryStatement(SqlRelQueryStatement(query), f)
 
+    /** Handle a query specified as a relational expression.
+      * The result should be finite for the call to complete.
+      *
+      * @param relExpr Relational expression to be evaluated
+      * @param f Function to handle each row of the returned result
+      * @return The list of the values returned by the function `f` on each row
+      */
     def handleListQuery[T](
         relExpr: RelExpr,
         f: TableRow => T
@@ -146,11 +197,26 @@ class Processor(
         { rs => rs.rows.map(row => f(row)).toList }
     )
 
+    /** Handle a singleton query specified as a relational expression.
+      * The query result should have at most one row.
+      *
+      * @param relExpr Relational expression to be evaluated
+      * @param f Function to handle the returned result.
+      *          The result should not be closed by the function,
+      *          it will be closed automatically when done.
+      * @return If the result is empty then `None`, otherwise the value
+      *         computed by function `f` on the result row, wrapped in `Some`.
+      */
     def handleSingletonQuery[T](
         relExpr: RelExpr,
         f: TableRow => T
     ): Option[T] = handleListQuery(relExpr, f).headOption
 
+    /** Handle a parsed update statement
+      *
+      * @param ustmt Parsed update statement
+      * @return Number of rows affected, if available
+      */
     def handleUpdateStatement(ustmt: SqlUpdateStatement): Option[Int] =
         try normalizer.normalizeUpdateStatement(ustmt) match {
             case SqlCreateExt(dataTarget, query) =>
@@ -200,7 +266,13 @@ class Processor(
             throw e
         }
 
-    private def createExt(
+    /** Create an external target and populate with the result of
+      * evaluating the relational expression
+      *
+      * @param dataTarget External target to be created and populated
+      * @param relExpr Relational expression to be evaluated
+      */
+    def createExt(
         dataTarget: ExternalTarget,
         relExpr: RelExpr
     ): Unit = {
@@ -210,7 +282,12 @@ class Processor(
         try dataTarget.write(plan.result.tableResult) finally plan.dispose()
     }
 
-    private def createDbObject(
+    /** Create a database object
+      *
+      * @param sqlDbObj Specification of the database object to be created
+      * @param duration Preferred duration of the object, temporary or permanent
+      */
+    def createDbObject(
         sqlDbObj: SqlDbObject,
         duration: DbObjectDuration
     ): SchemaObject = sqlDbObj match {
@@ -225,7 +302,18 @@ class Processor(
             throw new RuntimeException("Cannot create: " + sqlDbObj)
     }
 
-    private def createTable(
+    /** Create a table and populate with the result of
+      * evaluating a relational expression.
+      *
+      * @param table Specification of the table to be created
+      * @param duration Preferred duration of the table, temporary or permanent
+      * @param locIdOpt Location on which to create the table,
+      *                 use default location if None.
+      * @param relExprOpt If specified, evaluate the expression
+      *                   and populate the table with the result
+      * @return Schema entry of the created table
+      */
+    def createTable(
         table: Table,
         duration: DbObjectDuration,
         locIdOpt: Option[LocationId],
@@ -249,6 +337,14 @@ class Processor(
             schemaTable
     }
 
+    /** Create an empty table
+      *
+      * @param table Specification of the table to be created
+      * @param duration Preferred duration of the table, temporary or permanent
+      * @param locIdOpt Location on which to create the table,
+      *                 use default location if None.
+      * @return Schema entry of the created table
+      */
     def createTable(
         table: Table,
         duration: DbObjectDuration,
@@ -281,7 +377,14 @@ class Processor(
         schemaTable
     }
 
-    private def createView(
+    /** Create a view
+      *
+      * @param name Name of the view to be created
+      * @param expr Logical expression underlying the view to be created
+      * @param duration Duration of the view -- temporary or permanent
+      * @return Schema entry of the created view
+      */
+    def createView(
         name: String,
         expr: LogicalExpr,
         duration: DbObjectDuration
@@ -305,9 +408,16 @@ class Processor(
             )
     }
 
-    // execution takes care of cross-location transfer
-    // in case locId != relExpr.locationId
-    private def createTable(
+    /** Create a table containing the result of evaluating a
+      * relational expression.
+      *
+      * @param table Specification of the table to be created
+      * @param duration Preferred duration of the table, temporary or permanent
+      * @param locIdOpt Preferred location on which to create the table,
+      *                 use the most convenient location if None. Evaluation          *                 takes care of cross-location data transfer when needed.
+      * @return Schema entry of the created table
+      */
+    def createTable(
         name: String,
         relExpr: RelExpr,
         duration: DbObjectDuration,
@@ -339,6 +449,10 @@ class Processor(
         } finally plan.dispose()
     }
 
+    /** Create a table containing the result of evaluating a prepared
+      * relational expression. Convenience method, not to be called
+      * directly by applications.
+      */
     def createTableFromExpr(
         preparedRelExpr: RelExpr,
         tableName: String,
@@ -375,6 +489,15 @@ class Processor(
         schemaTable
     }
 
+    /** Create a table containing the rows provided by the given iterator.
+      *
+      * @param dataColumns Columns metadata for the rows
+      * @param dataRows Iterator providing the rows for the table
+      * @param dstLocId Location of the created table
+      * @param dstTableName Name of the created table
+      * @param dstTableDuration Duration of the table -- temporary or permanent
+      * @return Schema entry of the created table
+      */
     def createTableFromTuples(
         dataColumns: List[Column],
         dataRows: Iterator[TableRow],
@@ -421,7 +544,16 @@ class Processor(
             (TableRefSourceExplicit(schema, schemaTable), Some(schemaTable.id))
     }
 
-    private def createMLObject(
+    /** Create a machine learning object
+      *
+      * @param libOpt The underlying machine learning library,
+      *               use the default library if not specified
+      * @param sqlMLObj Specification of the object to be created
+      * @param trainRelExpr Relational expression -- is evaluated and the
+      *                     result is used for training the object
+      * @param duration Preferred duration of the object, temporary or permanent
+      */
+    def createMLObject(
         libOpt: Option[String],
         sqlMLObj: SqlMLObject,
         trainRelExpr: RelExpr,
@@ -463,9 +595,11 @@ class Processor(
         } finally plan.dispose()
     }
 
+    /** Drop the object with the given id from the schema */
     def drop(id: SchemaObjectId): Unit = drop(id.repr)
 
-    private def drop(id: String): Unit = {
+    /** Drop the object with the given id from the schema */
+    def drop(id: String): Unit = {
         val obj: SchemaObject = schema.objectOpt(id) getOrElse {
             throw new IllegalArgumentException(
                 "Object \"" + id + "\" not found"
@@ -495,7 +629,12 @@ class Processor(
         deps.distinct.reverse.foreach { dep => drop(dep) }
     }
 
-    private def insert(tableRef: TableRefTarget, relExpr: RelExpr): Unit = {
+    /** Evaluate a relational expression and insert the result into a table
+      *
+      * @param tableRef Table into which the result is to be inserted
+      * @param relExpr Relational expression to be evaluated
+      */
+    def insert(tableRef: TableRefTarget, relExpr: RelExpr): Unit = {
         val updRelExpr: RelExpr = relExpr.locationIdOpt match {
             case Some(rLocId) if tableRef.locationId != rLocId =>
                 // result evaluated at a different location
@@ -522,6 +661,12 @@ class Processor(
         } finally plan.dispose()
     }
 
+    /** Insert rows into a table
+      *
+      * @param tableRef Table into which the rows are to be inserted
+      * @param dataColumns Column metadata for the rows to be inserted
+      * @param dataRows Iterator providing the rows to be inserted
+      */
     def insert(
         tableRef: TableRefTarget,
         dataColumns: List[Column],
@@ -531,14 +676,26 @@ class Processor(
         dbHandler.handleInsertIn(dataColumns, dataRows, tableRef)
     }
 
+    /** Delete rows from a table
+      *
+      * @param tableId Table from which the rows are to be deleted
+      * @param predExpr Predicate specifying the rows to be deleted --
+      *                 if not specified, all rows in the table are deleted
+      */
     def delete(tableId: TableId, predExpr: ScalExpr = BoolConst(true)): Unit =
         handleUpdateStatement(SqlDelete(tableId, predExpr))
 
-    private def updateTable(stmt: SqlUpdateTable): Unit = {
+    /** Update the rows of a table */
+    def updateTable(stmt: SqlUpdateTable): Unit = {
         val locationId: LocationId = stmt.tableId.locationId
         locationDbHandler(locationId).handleUpdate(stmt)
     }
 
+    /** Create an index
+      *
+      * @param stmt Specification of the index
+      * @param dur Duration of the index, temporary or permanent
+      */
     def createIndex(
         stmt: SqlCreateIndex,
         dur: DbObjectDuration = Persistent
@@ -554,6 +711,7 @@ class Processor(
         schema.addIndexLocation(stmt.name, locationId, updDur)
     }
 
+    /** Drop the specified index */
     def dropIndex(stmt: SqlDropIndex): Unit = {
         val locationId: LocationId =
             schema.indexLocationOpt(stmt.indexName) getOrElse {
@@ -566,7 +724,8 @@ class Processor(
         schema.removeIndexLocation(stmt.indexName)
     }
 
-    private def updateBatch(stmts: List[SqlUpdateTable]): Unit = {
+    /** Execute a batch of update statements */
+    def updateBatch(stmts: List[SqlUpdateTable]): Unit = {
         // group consecutive statements by location
         val stmtGroups: List[(LocationId, List[SqlUpdateTable])] =
             stmts.foldLeft (List[(LocationId, List[SqlUpdateTable])]()) {
@@ -592,7 +751,12 @@ class Processor(
         }
     }
 
-    private def executeNativeStatement(
+    /** Execute a native statement at the specified location
+      *
+      * @param locId Location at which to execute the given statement
+      * @param stmtStr The statement to be executed (not interpreted by Sclera)
+      */
+    def executeNativeStatement(
         locId: LocationId,
         stmtStr: String
     ): Unit = {
@@ -600,6 +764,9 @@ class Processor(
         dbHandler.executeNativeStatement(stmtStr)
     }
 
+    /** Evaluate a prepared relational expression.
+      * Convenience method, not to be called directly by applications.
+      */
     def queryResult(preparedRelExpr: RelExpr): TableResult = {
         val locationId: LocationId = preparedRelExpr.locationIdOpt getOrElse {
             throw new RuntimeException(
@@ -612,6 +779,10 @@ class Processor(
         dbHandler.queryResult(preparedRelExpr)
     }
 
+    /** Handle a parsed admin statement
+      *
+      * @param astmt Parsed admin statement
+      */
     def handleAdminStatement(astmt: SqlAdminStatement): Unit =
         try astmt match {
             case SqlCreateSchema =>
@@ -639,6 +810,12 @@ class Processor(
             throw e
         }
 
+    /** Add an external table to the schema
+      *
+      * @param tableId The id to be assigned to the table
+      * @param tableOpt Specification of the table to be added,
+      *                 if different from that provided by the underlying system
+      */
     def addTable(tableId: TableId, tableOpt: Option[Table]): Unit = {
         val locationId: LocationId = tableId.locationId
         val (baseTable, duration) =
@@ -655,9 +832,14 @@ class Processor(
         }
     }
 
-    def removeTable(tableId: TableId) =
-        schema.removeObject(tableId)
+    /** Remove the specified table from the schema */
+    def removeTable(tableId: TableId) = schema.removeObject(tableId)
 
+    /** Handle a parsed admin query statement
+      *
+      * @param aqstmt Parsed admin statement
+      * @return Result of evaluating the statement
+      */
     def handleAdminQueryStatement(
         aqstmt: SqlAdminQueryStatement
     ): TableResult =
@@ -760,6 +942,9 @@ class Processor(
             throw e
         }
 
+    /** Tables at a location (all locations if not specified)
+      * not yet added to the schema
+      */
     def remainingTables(
         locIdOpt: Option[LocationId]
     ): List[(SchemaTable, DbObjectDuration)] =
@@ -767,6 +952,7 @@ class Processor(
             !SchemaTable.objectOpt(schema, st.id).isDefined
         }
 
+    /** List of base tables at a location (all locations if not specified) */
     def baseTables(
         locIdOpt: Option[LocationId]
     ): List[(SchemaTable, DbObjectDuration)] = {
@@ -782,7 +968,13 @@ class Processor(
         }
     }
 
-    private def listObjects(
+    /** List the given objects in the given format
+      *
+      * @param dbObjects List of objects with their duration
+      * @param format Output format
+      * @return The list in the specified format, structured as a query result
+      */
+    def listObjects(
         dbObjects: List[(SchemaObject, DbObjectDuration)],
         format: Format
     ): TableResult = {
@@ -841,7 +1033,8 @@ class Processor(
         }
     }
 
-    private def listLocations: TableResult = {
+    /** List of all the locations, structured as a query result */
+    def listLocations: TableResult = {
         val cols: List[Column] = List(
             "LOCATION", "SYSTEM", "DATABASE", "PROPERTY", "REACHABLE"
         ).map { colName => Column(colName, SqlCharVarying(None)) }
@@ -869,14 +1062,18 @@ class Processor(
         ScalTableResult(cols, vals)
     }
 
-    private def explain(relExpr: RelExpr): TableResult = ScalTableResult(
+    /** A list of rows explaining the evaluation plan for the given
+      * relational expression, structured as a query result
+      */
+    def explain(relExpr: RelExpr): TableResult = ScalTableResult(
         List(Column("EXPLAIN", SqlCharVarying(None))),
         planExplain.explain(relExpr).iterator.map { s =>
             Map("EXPLAIN" -> CharConst(s))
         }
     )
 
-    private def showConfig: TableResult = {
+    /** The list of configuration parameters, structured as a query result */
+    def showConfig: TableResult = {
         val cols: List[Column] = 
             List("CONFIG", "VALUE").map {
                 colName => Column(colName, SqlCharVarying(None))
@@ -890,7 +1087,8 @@ class Processor(
         ScalTableResult(cols, vals)
     }
 
-    private def showOptions: TableResult = {
+    /** The list of configuration options, structured as a query result */
+    def showOptions: TableResult = {
         val cols: List[Column] = 
             List("OPTION", "VALUE").map {
                 colName => Column(colName, SqlCharVarying(None))
@@ -918,21 +1116,26 @@ class Processor(
         ScalTableResult(cols, vals)
     }
 
+    /** Clean up and free allocated resources */
     def close(): Unit = {
         dropTemporaryObjects()
         schema.close()
         SqlDriver.closeConnectionPools()
     }
 
+    /** Drop all temporary duration objects in the schema */
     def dropTemporaryObjects(): Unit =
         schema.temporaryObjects.foreach { obj => dropExplicit(obj, Temporary) }
 
-    // for JDBC
+    /** Plan the given query (needed by the JDBC driver) */
     def planQuery(
         s: SqlRelQueryStatement,
         maxRowsOpt: Option[Int]
     ): RelEvalPlan = planQuery(s.relExpr, maxRowsOpt)
 
+    /** Plan the given query, with a limit on number of result rows
+      * if specified (needed by the JDBC driver)
+      */
     def planQuery(
         expr: RelExpr,
         maxRowsOpt: Option[Int] = None
@@ -947,7 +1150,18 @@ class Processor(
     }
 }
 
+/** Companion object for class `Processor` */
 object Processor {
+    /** Create an instance of the Sclera statement processor
+      *
+      * @param schemaDbms DBMS to be used to store Sclera's schema tables
+      * @param schemaDb Designated database in the schema DBMS specified above
+      * @param schemaDbConfig Configuration for the schema DBMS connection
+      * @param tempDbms DBMS to be used to store temporary tables
+      * @param tempDb Designated database in the temporary DBMS specified above
+      * @param tempDbConfig Configuration for the temporary DBMS connection
+      * @param checkSchema Check schema during initialization
+      */
     def apply(
         schemaDbms: String = ScleraConfig.schemaDbms,
         schemaDb: String = ScleraConfig.schemaDb,
@@ -966,6 +1180,14 @@ object Processor {
         checkSchema = checkSchema
     )
 
+    /** Create an instance of the Sclera statement processor
+      *  
+      * @param info Properties object containing configuration data for
+      *             the designated schema and temporary databases, and
+      *             a flag specifying whether the schema is to be checked
+      *             on initialization. For details on the properties,
+      *             please see the alternative constructor.
+      */
     def apply(info: java.util.Properties): Processor = {
         val schemaDbms: String =
             info.getProperty("schemaDbms", ScleraConfig.schemaDbms)

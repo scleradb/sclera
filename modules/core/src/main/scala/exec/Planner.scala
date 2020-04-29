@@ -51,6 +51,7 @@ import com.scleradb.analytics.sequence.matcher.plan.RowSequenceMatchEvalOp
 import com.scleradb.analytics.nlp.expr.NlpRelOp
 import com.scleradb.analytics.nlp.plan.NlpEvalOp
 
+/** Plans the evaluation of relational expressions */
 class Planner(processor: Processor) {
     // plan the given expression
     def planRel(
