@@ -11,7 +11,7 @@ ThisBuild / scmInfo := Some(
     )
 )
 
-ThisBuild / version := "4.0"
+ThisBuild / version := "4.0.1-SNAPSHOT"
 
 ThisBuild / startYear := Some(2012)
 
