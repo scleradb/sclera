@@ -1,4 +1,6 @@
 # Sclera - Shell
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.scleradb/sclera-shell_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.scleradb/sclera-shell_2.13)
+[![scaladoc](https://javadoc.io/badge2/com.scleradb/sclera-shell_2.13/scaladoc.svg)](https://javadoc.io/doc/com.scleradb/sclera-shell_2.13)
 
 This component provides a command-line shell for interactive SQL processing.
 
