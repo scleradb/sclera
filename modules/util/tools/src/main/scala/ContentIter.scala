@@ -57,7 +57,7 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
             iter(url.toString, urlis, isRoot = true)
     }
 
-    /** Contents of the root file/directory */
+    /** Contents of the file/directory */
     def iter(f: File): Iterator[Content] = iter(f, isRoot = true)
 
     /** Contents of the file/directory */
