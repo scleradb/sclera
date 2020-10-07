@@ -61,7 +61,7 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
     def iter(f: File): Iterator[Content] = iter(f, isRoot = true)
 
     /** Contents of the file/directory */
-    def iter(f: File, isRoot: Boolean): Iterator[Content] =
+    private def iter(f: File, isRoot: Boolean): Iterator[Content] =
         if( f.isDirectory ) {
             f.listFiles.iterator.flatMap(dirf => iter(dirf, isRoot = false))
         } else {
@@ -71,7 +71,7 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
         }
 
     /** Contents of the input stream */
-    def iter(
+    private def iter(
         name: String,
         is: InputStream,
         isRoot: Boolean
