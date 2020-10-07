@@ -27,7 +27,7 @@ This repository includes the following modules. Please follow the links for the 
 
 ### Utilities
 - [Sclera - Parsing](modules/util/parsing)
-- [Sclera - Automata](modules/util/parsing)
+- [Sclera - Automata](modules/util/automata)
 - [Sclera - Regular Expression Parser](modules/util/regexparser)
 - [Sclera - Encryption Manager](modules/util/encrypt)
 - [Sclera - Tools](modules/util/tools)
