@@ -30,9 +30,7 @@ object Format {
             }
         }
 
-        val separatorStr: String = cnames.zip(cwidth).map {
-            case (_, w) => "-"*(w+2)
-        } mkString("+")
+        val separatorStr: String = cwidth.map { w => "-"*(w+2) } mkString("+")
 
         def rowStr(vals: List[String]): String = vals.zip(cwidth).map {
             case (s, w) => " " + s.take(w).padTo(w, " ").mkString + " "
