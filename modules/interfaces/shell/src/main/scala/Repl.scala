@@ -91,7 +91,7 @@ object Repl {
         partial: Option[String] = None
     ): Iterator[String] =
         if( input.hasNext ) {
-            val s: String = input.next.trim
+            val s: String = input.next().trim
             if( s == "" || s.take(2) == "--" ) // empty/comment
                 scriptIter(input, partial)
             else {
@@ -263,7 +263,7 @@ object Repl {
                 Format.formatResultSet(cnames, rows.toList)
 
             format.foreach { s => println(s) }
-            println
+            println()
     }
 
     private def showResult(
@@ -271,7 +271,7 @@ object Repl {
         rows: List[List[String]]
     ): Unit = {
         Format.formatResultSet(cnames, rows).foreach { s => println(s) }
-        println
+        println()
     }
 
     private def initProcessor(checkSchema: Boolean): Processor = {
@@ -298,11 +298,11 @@ object Repl {
             case Nil =>
                 println("Welcome to Sclera " + ScleraConfig.version)
                 println("[" + ScleraConfig.rootDir.getCanonicalPath + "]")
-                println
+                println()
 
                 consoleIter(ScleraConfig.prompt, handleInputInteractive)
 
-                println
+                println()
 
             case sqls =>
                 sqls.foreach(handleInputInteractive)

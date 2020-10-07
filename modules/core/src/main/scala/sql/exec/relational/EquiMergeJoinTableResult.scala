@@ -115,7 +115,7 @@ class AlignedGroupsIterator(
         TableRowGroupIterator(evaluator, rhsInput.typedRows, List(rhsCol))
 
     private def headOption(it: Iterator[TableRowGroup]): Option[TableRowGroup] =
-        if( it.hasNext ) Some(it.next) else None
+        if( it.hasNext ) Some(it.next()) else None
 
     private var lhsLookaheadOpt: Option[TableRowGroup] = headOption(lhsGroups)
     private var rhsLookaheadOpt: Option[TableRowGroup] = headOption(rhsGroups)

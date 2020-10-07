@@ -447,7 +447,7 @@ class ScalExprEvaluator(processor: Processor) {
 
             if( remOptIter.hasNext ) {
                 // match failed
-                remOptIter.next match {
+                remOptIter.next() match {
                     case (_: SqlNull) => None // found a null
                     case _ => Some(false) // found a mismatch
                 }
@@ -465,7 +465,7 @@ class ScalExprEvaluator(processor: Processor) {
                 }
 
             if( remOptIter.hasNext ) {
-                remOptIter.next match {
+                remOptIter.next() match {
                     case (_: SqlNull) => // found a null
                         val matchExists: Boolean =
                             remOptIter.exists {

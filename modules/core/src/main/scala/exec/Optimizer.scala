@@ -586,11 +586,11 @@ object Optimizer {
 
         if( !Location.isSystemExpr(before) ) {
             ret.foreach { after =>
-                println
+                println()
                 println("Before: " + name)
                 println(before)
 
-                println
+                println()
                 println("After: " + name)
                 println(after)
             }

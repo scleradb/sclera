@@ -49,7 +49,7 @@ sealed abstract class ResultSet extends java.sql.ResultSet {
             try {
                 if( iter.hasNext ) {
                     rowCount += 1
-                    Some(iter.next)
+                    Some(iter.next())
                 } else None
             } catch {
                 case (e: SQLException) => throw e
