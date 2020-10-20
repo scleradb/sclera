@@ -23,15 +23,14 @@ import java.io.{File, InputStream, FileInputStream}
 import java.util.zip.{ZipInputStream, GZIPInputStream}
 
 import scala.collection.mutable
-import scala.io.Source
 import scala.util.{Try, Success, Failure}
 
 /** Content of a file
  *
  * @param name File name
- * @param text File's text content
+ * @param inputStream File's content as an InputStream
  */
-class Content(val name: String, val text: String)
+class Content(val name: String, val inputStream: InputStream)
 
 /** Recursively iterate over the files in a directory/zip file
   *
@@ -84,10 +83,7 @@ class ContentIter(filterOpt: Option[String => Boolean]) {
         } else if( name.endsWith(".gz") ) {
             val gzis: GZIPInputStream = new GZIPInputStream(is)
             iter(name.substring(0, name.length - 3), gzis, isRoot)
-        } else {
-            val src: Source = Source.fromInputStream(is)
-            Iterator(new Content(name, src.mkString))
-        }
+        } else Iterator(new Content(name, is))
 
     /** Contents of the zipped input stream */
     def unzipIter(zis: ZipInputStream): Iterator[Content] =
