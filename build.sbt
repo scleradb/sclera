@@ -13,7 +13,7 @@ ThisBuild / scmInfo := Some(
 
 ThisBuild / versionScheme := Some("early-semver")
 
-ThisBuild / version := "4.0.1-SNAPSHOT"
+ThisBuild / version := "4.1-SNAPSHOT"
 
 ThisBuild / startYear := Some(2012)
 
