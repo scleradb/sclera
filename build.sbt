@@ -43,6 +43,7 @@ lazy val sclera = Project(
     config,
     service,
     tools,
+    io,
     encrypt,
     automata,
     parsing,
@@ -72,6 +73,11 @@ lazy val service = Project(
     base = file("modules/service")
 ) dependsOn (
     config % "provided"
+)
+
+lazy val io = Project(
+    id = "sclera-io",
+    base = file("modules/util/io")
 )
 
 lazy val tools = Project(

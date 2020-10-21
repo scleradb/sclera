@@ -1,5 +1,5 @@
 /**
-* Sclera - Tools
+* Sclera - IO
 * Copyright 2012 - 2020 Sclera, Inc.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 * limitations under the License.
 */
 
-package com.scleradb.util.tools
+package com.scleradb.util.io
 
 import java.net.{URL, MalformedURLException}
 import java.nio.file.{Path, PathMatcher, FileSystem, FileSystems}
